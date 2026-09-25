@@ -10,7 +10,7 @@ can hand to a printer or a developer.
 [**Try the picker**](https://gutslfo.github.io/brand-book/levain/explorer.html) ·
 [**Install**](#install)
 
-![Licence CC BY-NC 4.0](https://img.shields.io/badge/licence-CC%20BY--NC%204.0-2b2b2b)
+![MIT licence](https://img.shields.io/badge/licence-MIT-2b2b2b)
 ![Claude skill](https://img.shields.io/badge/Claude-skill-c96442)
 ![Python 3, no dependencies](https://img.shields.io/badge/python-3%2C%20no%20dependencies-3a5a8c)
 ![Fonts](https://img.shields.io/badge/Google%20Fonts-1%2C608%20families-2f6b4f)
@@ -250,8 +250,7 @@ layouts, more example brands, and reports from claude.ai.
 
 ## Licence
 
-[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Free to use, share and adapt for
-non-commercial purposes, with credit to Pierre Tran / Taykon Studio. For commercial use, get in touch
-via [taykon.studio](https://taykon.studio).
+MIT. Use it for your own brand, your clients' brands, or build on it; keep the copyright notice.
 
-Made by Pierre Tran at [Taykon Studio](https://taykon.studio), Geneva.
+Made by Pierre Tran at [Taykon Studio](https://taykon.studio), Geneva, to give founders the kind of
+brand book that usually takes a studio weeks.
