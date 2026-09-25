@@ -222,7 +222,9 @@ figure{min-width:0}
   const F = B.fonts;
   const stack = f => f ? `"${f.family}", ${f.fallback || 'sans-serif'}` : null;
   function loadFont(f) {
-    if (!f || f.local) return; // ponytail: a licensed font sets local:true and brings its own @font-face
+    if (!f) return;
+    if (f.src) { new FontFace(f.family, `url("${f.src}")`).load().then(x => document.fonts.add(x)).catch(() => {}); return; }
+    if (f.local) return; // installed on the reader's machine, nothing to fetch
     const w = [...new Set(f.weights || [])].sort((a, b) => a - b);
     const q = encodeURIComponent(f.family).replace(/%20/g, '+') + (w.length ? ':wght@' + w.join(';') : '');
     const l = document.createElement('link');

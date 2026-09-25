@@ -3,9 +3,10 @@
     python build.py explorer path/to/brand.json [-o explorer.html]
     python build.py book     path/to/brand.json [-o brand-book.html]
 
-File paths in brand.json (logo.file, imagery.images[].file) are resolved relative to
-brand.json and embedded as data URIs, so the page is one self-contained file. The
-logo's aspect ratio is measured. Stdlib only.
+File paths in brand.json (logo.file, imagery.images[].file, fonts.*.file) are resolved
+relative to brand.json and embedded as data URIs, so the page is one self-contained file.
+The logo's aspect ratio is measured. The explorer also gets the Google Fonts catalogue
+from assets/fonts.json, for its search. Stdlib only.
 """
 import argparse, base64, json, re, struct, sys
 from pathlib import Path
@@ -13,6 +14,7 @@ from pathlib import Path
 ASSETS = Path(__file__).resolve().parent.parent / "assets"
 TEMPLATES = {"explorer": "explorer.html", "book": "brand-book.html"}
 MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
+FONT_MIME = {".woff2": "font/woff2", ".woff": "font/woff", ".otf": "font/otf", ".ttf": "font/ttf"}
 
 
 def svg_ratio(text):
@@ -57,6 +59,13 @@ def embed_files(brand, base):
     for img in (brand.get("imagery") or {}).get("images") or []:
         if img.get("file"):
             img["src"] = data_uri((base / img["file"]).resolve(), "image")[2]
+    for role, font in (brand.get("fonts") or {}).items():
+        if font and font.get("file"):
+            path = (base / font["file"]).resolve()
+            if path.suffix.lower() not in FONT_MIME:
+                sys.exit(f"fonts.{role}: {path.name} is not WOFF2, WOFF, OTF or TTF")
+            font["local"] = True
+            font["src"] = f"data:{FONT_MIME[path.suffix.lower()]};base64,{base64.b64encode(path.read_bytes()).decode()}"
     return brand
 
 
@@ -68,6 +77,8 @@ def build(kind, brand_path, out=None):
     if "/*__BRAND__*/null" not in template:
         sys.exit("template is missing the /*__BRAND__*/null placeholder")
     html = template.replace("/*__BRAND__*/null", payload)
+    if "/*__FONTS__*/[]" in html:
+        html = html.replace("/*__FONTS__*/[]", (ASSETS / "fonts.json").read_text(encoding="utf-8"))
     out = Path(out) if out else brand_path.parent / TEMPLATES[kind]
     out.write_text(html, encoding="utf-8")
     print(f"{kind}: {out}")

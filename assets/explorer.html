@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
-/* Explorer: tune the palette and the fonts, see them live, send the choices back.
-   The tool's own interface stays neutral so the brand is the only colour on screen. */
+/* Explorer: pick between proposals, tune the palette and the fonts, see them live, send the
+   choices back. The tool's own interface stays neutral so the brand is the only colour on screen. */
 :root{
   --ui-bg:#f4f4f2;--ui-panel:#ffffff;--ui-ink:#1b1b1a;--ui-soft:#5f5e5a;--ui-line:#e2e1dc;--ui-focus:#2458d6;
   --ui-font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -17,7 +17,7 @@
 body{background:var(--ui-bg);color:var(--ui-ink);font:14px/1.45 var(--ui-font);font-synthesis:none;-webkit-font-smoothing:antialiased}
 button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--ui-focus);outline-offset:2px}
-.app{display:grid;grid-template-columns:420px minmax(0,1fr);min-height:100vh}
+.app{display:grid;grid-template-columns:440px minmax(0,1fr);min-height:100vh}
 .empty{padding:48px;max-width:40em}
 
 /* panel */
@@ -31,7 +31,8 @@ button,input,select{font:inherit;color:inherit}
 .scroll{flex:1;overflow:auto;padding:16px 20px 24px}
 .section+.section{margin-top:24px}
 .label{font-size:12px;color:var(--ui-soft);margin-bottom:8px;display:block}
-.seg{display:inline-flex;border:1px solid var(--ui-line);border-radius:6px;overflow:hidden}
+.hint{font-size:12px;color:var(--ui-soft);margin-top:6px}
+.seg{display:inline-flex;border:1px solid var(--ui-line);border-radius:6px;overflow:hidden;flex-wrap:wrap}
 .seg button{background:none;border:0;padding:6px 12px;cursor:pointer;color:var(--ui-soft)}
 .seg button[aria-pressed="true"]{background:var(--ui-ink);color:#fff}
 .row{display:grid;grid-template-columns:40px minmax(0,1fr) 108px 52px;gap:6px;align-items:center;padding:6px 0;border-top:1px solid var(--ui-line)}
@@ -41,19 +42,30 @@ button,input,select{font:inherit;color:inherit}
 .row .names input{border-color:transparent;padding:2px 6px}
 .row .names input:hover{border-color:var(--ui-line)}
 .row select{padding:5px 4px}
+.yours{font-size:12px;color:var(--ui-soft);padding:0 6px}
 .sum{margin-top:8px;color:var(--ui-soft)}
 .sum.bad{color:#b3261e}
-.chips{display:flex;flex-direction:column;gap:6px}
-.chip{border:1px solid var(--ui-line);border-radius:8px;padding:10px 12px;background:#fff;cursor:pointer;text-align:left}
-.chip:hover{border-color:var(--ui-ink)}
-.chip small{display:block;color:var(--ui-soft);font-size:12px}
+.cards{display:flex;flex-direction:column;gap:8px}
+.pcard{border:1px solid var(--ui-line);border-radius:8px;background:#fff;cursor:pointer;text-align:left;overflow:hidden;display:block;width:100%}
+.pcard:hover{border-color:var(--ui-soft)}
+.pcard[aria-pressed="true"]{border-color:var(--ui-ink);box-shadow:inset 0 0 0 1px var(--ui-ink)}
+.pcard .strip{display:flex;height:34px}
+.pcard .strip span{flex:1}
+.pcard .txt{display:block;padding:8px 12px 10px}
+.pcard b{display:block;font-weight:600}
+.pcard small{display:block;color:var(--ui-soft);font-size:12px;margin-top:2px}
+.pair-sample{display:block;font-size:22px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fontgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .fcard{border:1px solid var(--ui-line);border-radius:8px;padding:10px;background:#fff;cursor:pointer;text-align:left;min-width:0}
 .fcard:hover{border-color:var(--ui-soft)}
 .fcard[aria-pressed="true"]{border-color:var(--ui-ink);box-shadow:inset 0 0 0 1px var(--ui-ink)}
 .fcard .fn{font-size:20px;line-height:1.2;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fcard small{color:var(--ui-soft);font-size:12px}
-.cat{margin:16px 0 8px;font-size:12px;color:var(--ui-soft)}
+.searchrow{display:flex;gap:6px;margin-bottom:8px}
+.filechip{display:inline-block;border:1px dashed var(--ui-soft);border-radius:6px;padding:7px 12px;cursor:pointer;color:var(--ui-ink)}
+.filechip input{position:absolute;opacity:0;width:1px;height:1px}
+.filechip:focus-within{outline:2px solid var(--ui-focus);outline-offset:2px}
+.now{font-size:12px;color:var(--ui-soft);margin-left:8px}
 .export{border-top:1px solid var(--ui-line);padding:14px 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .primary{background:var(--ui-ink);color:#fff;border:0;border-radius:6px;padding:9px 14px;cursor:pointer;font-weight:600}
 .ghost{background:none;border:1px solid var(--ui-line);border-radius:6px;padding:8px 12px;cursor:pointer}
@@ -103,36 +115,54 @@ button,input,select{font:inherit;color:inherit}
 <body>
 <div id="app"></div>
 <script>window.BRAND = /*__BRAND__*/null;</script>
+<script>window.FONTS = /*__FONTS__*/[];</script>
 <script>
 (function () {
   const app = document.getElementById('app');
   if (!window.BRAND) { app.innerHTML = '<p class="empty">This is the empty explorer. Build it with <code>python scripts/build.py explorer brand.json</code>.</p>'; return; }
   const S = JSON.parse(JSON.stringify(window.BRAND));
-  S.type = S.type || {};
+  S.type = S.type || {}; S.explore = S.explore || {}; S.fonts = S.fonts || {};
+  const X = S.explore;
 
-  /* Curated Google Fonts. Weights listed are the ones each family actually ships between 300 and 800. */
-  const R5 = [300, 400, 500, 600, 700, 800];
-  const FONTS = [
-    ['Newsreader', 'Serif', R5], ['Fraunces', 'Serif', R5], ['Source Serif 4', 'Serif', R5], ['Spectral', 'Serif', R5],
-    ['EB Garamond', 'Serif', [400, 500, 600, 700, 800]], ['Cormorant Garamond', 'Serif', [300, 400, 500, 600, 700]],
-    ['Playfair Display', 'Serif', [400, 500, 600, 700, 800]], ['Bodoni Moda', 'Serif', [400, 500, 600, 700, 800]],
-    ['Crimson Pro', 'Serif', R5], ['Lora', 'Serif', [400, 500, 600, 700]], ['Libre Caslon Text', 'Serif', [400, 700]],
-    ['Young Serif', 'Serif', [400]], ['Gloock', 'Serif', [400]], ['DM Serif Display', 'Serif', [400]], ['Instrument Serif', 'Serif', [400]],
-    ['Inter', 'Sans', R5], ['Hanken Grotesk', 'Sans', R5], ['IBM Plex Sans', 'Sans', [300, 400, 500, 600, 700]], ['DM Sans', 'Sans', R5],
-    ['Manrope', 'Sans', R5], ['Plus Jakarta Sans', 'Sans', R5], ['Work Sans', 'Sans', R5], ['Public Sans', 'Sans', R5],
-    ['Schibsted Grotesk', 'Sans', [400, 500, 600, 700, 800]], ['Instrument Sans', 'Sans', [400, 500, 600, 700]], ['Figtree', 'Sans', R5],
-    ['Outfit', 'Sans', R5], ['Sora', 'Sans', R5], ['Onest', 'Sans', R5], ['Familjen Grotesk', 'Sans', [400, 500, 600, 700]],
-    ['Space Grotesk', 'Display', [300, 400, 500, 600, 700]], ['Archivo', 'Display', R5], ['Syne', 'Display', [400, 500, 600, 700, 800]],
-    ['Bricolage Grotesque', 'Display', R5], ['Unbounded', 'Display', R5], ['Darker Grotesque', 'Display', R5],
-    ['Oswald', 'Display', [300, 400, 500, 600, 700]], ['Anton', 'Display', [400]], ['Bebas Neue', 'Display', [400]], ['Archivo Black', 'Display', [400]],
-    ['JetBrains Mono', 'Mono', R5], ['IBM Plex Mono', 'Mono', [300, 400, 500, 600, 700]], ['DM Mono', 'Mono', [300, 400, 500]],
-    ['Space Mono', 'Mono', [400, 700]], ['Geist Mono', 'Mono', R5], ['Fragment Mono', 'Mono', [400]],
-  ].map(([family, cat, weights]) => ({ family, cat, weights }));
-  const FALLBACK = { Serif: 'Georgia, serif', Sans: 'system-ui, sans-serif', Display: 'system-ui, sans-serif', Mono: 'ui-monospace, monospace' };
-  const fontInfo = fam => FONTS.find(f => f.family === fam);
+  /* ---------- fonts: the whole Google Fonts catalogue, plus the user's own ---------- */
+  const CAT_FB = { 'Serif': 'Georgia, serif', 'Sans Serif': 'system-ui, sans-serif', 'Display': 'system-ui, sans-serif', 'Handwriting': 'cursive', 'Monospace': 'ui-monospace, monospace' };
+  const CAT_LABEL = { 'Serif': 'Serif', 'Sans Serif': 'Sans', 'Display': 'Display', 'Handwriting': 'Script', 'Monospace': 'Mono' };
+  const CATALOGUE = (window.FONTS || []).map(([family, cat, weights, pop]) => ({ family, cat, weights, pop }));
+  const byFamily = new Map(CATALOGUE.map(f => [f.family.toLowerCase(), f]));
+  const info = fam => byFamily.get(String(fam).toLowerCase());
+  const OWN = []; // {family, file?, src?}: fonts the user brought, as files or installed on the machine
+  ['display', 'text', 'mono'].forEach(r => { const f = S.fonts[r]; if (f && f.local && !OWN.some(o => o.family === f.family)) OWN.push({ family: f.family, file: f.file, src: f.src }); });
 
-  /* helpers */
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const loaded = new Set();
+  function loadFont(family, weights, text) {
+    if (!family || OWN.some(o => o.family === family)) return;
+    const key = family + (weights || []).join() + (text || '');
+    if (loaded.has(key)) return; loaded.add(key);
+    const q = encodeURIComponent(family).replace(/%20/g, '+') + (weights && weights.length ? ':wght@' + weights.join(';') : '');
+    const l = document.createElement('link'); l.rel = 'stylesheet';
+    l.href = `https://fonts.googleapis.com/css2?family=${q}${text ? '&text=' + encodeURIComponent(text) : ''}&display=swap`;
+    document.head.appendChild(l);
+  }
+  function addOwnFace(o) { if (!o.src) return; const ff = new FontFace(o.family, `url("${o.src}")`); return ff.load().then(x => document.fonts.add(x)).catch(() => {}); }
+  OWN.forEach(addOwnFace);
+  // Two weights per family: regular plus the nearest strong weight it ships.
+  function pickWeights(fam, role) {
+    const f = info(fam); const w = f ? f.weights : [400];
+    if (role === 'mono') return [w.includes(400) ? 400 : w[0]];
+    const strong = [600, 700, 500].find(x => w.includes(x));
+    return [...new Set([w.includes(400) ? 400 : w[0], strong || w[w.length - 1]])];
+  }
+  function setFont(role, fam) {
+    const own = OWN.find(o => o.family === fam);
+    const cur = S.fonts[role] || {};
+    if (own) S.fonts[role] = Object.assign({ role: cur.role }, { family: fam, weights: [400], local: true, fallback: 'sans-serif' }, own.file ? { file: own.file } : {}, own.src ? { src: own.src } : {});
+    else { const f = info(fam); S.fonts[role] = { family: fam, weights: pickWeights(fam, role), fallback: f ? CAT_FB[f.cat] : 'sans-serif', role: cur.role }; }
+    if (!S.fonts[role].role) delete S.fonts[role].role;
+    if (role === 'display') S.fonts.display.weight = S.fonts.display.weights[0];
+  }
+
+  /* ---------- colour ---------- */
   const rgb = h => { h = h.replace('#', ''); if (h.length === 3) h = [...h].map(c => c + c).join(''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
   const hex = a => '#' + a.map(v => Math.round(v).toString(16).padStart(2, '0')).join('').toUpperCase();
   const mix = (a, b, t) => hex(rgb(a).map((v, i) => v + (rgb(b)[i] - v) * t));
@@ -141,43 +171,17 @@ button,input,select{font:inherit;color:inherit}
   const byRole = r => S.colors.find(c => c.role === r);
   const UNIQUE = ['dark', 'light', 'primary', 'secondary', 'accent'];
   const ROLES = { dark: 'Dark base', light: 'Light base', primary: 'Primary', secondary: 'Secondary', accent: 'Accent', support: 'Support' };
-  const loaded = new Set();
-  function loadFont(family, weights, text) {
-    const key = family + (weights || []).join() + (text || '');
-    if (loaded.has(key)) return; loaded.add(key);
-    const q = encodeURIComponent(family).replace(/%20/g, '+') + (weights && weights.length ? ':wght@' + weights.join(';') : '');
-    const l = document.createElement('link'); l.rel = 'stylesheet';
-    l.href = `https://fonts.googleapis.com/css2?family=${q}${text ? '&text=' + encodeURIComponent(text) : ''}&display=swap`;
-    document.head.appendChild(l);
+  const clone = o => JSON.parse(JSON.stringify(o));
+  let selPalette = -1;
+  if (X.palettes && X.palettes.length) {
+    if (!S.colors || !S.colors.length) { S.colors = clone(X.palettes[0].colors); selPalette = 0; }
+    else selPalette = X.palettes.findIndex(p => JSON.stringify(p.colors.map(c => c.hex)) === JSON.stringify(S.colors.map(c => c.hex)));
   }
-  // Two weights per family: regular plus the nearest strong weight it ships.
-  function pickWeights(info, role) {
-    const w = info ? info.weights : [400];
-    if (role === 'mono') return [w.includes(400) ? 400 : w[0]];
-    const strong = [600, 700, 500].find(x => w.includes(x));
-    return [...new Set([w.includes(400) ? 400 : w[0], strong || w[w.length - 1]])];
-  }
-  function setFont(role, family) {
-    const info = fontInfo(family);
-    const cur = S.fonts[role] || {};
-    S.fonts[role] = Object.assign({}, cur, { family, weights: pickWeights(info, role), fallback: info ? FALLBACK[info.cat] : (cur.fallback || 'sans-serif') });
-    if (role === 'display') S.fonts.display.weight = S.fonts.display.weights[0];
-  }
-
-  /* logo */
-  const L = S.logo || {};
-  if (L.src) document.documentElement.style.setProperty('--logo', `url("${L.src}")`);
-  const LR = L.src ? (L.ratio || 3) : Math.max(1.2, S.name.length * 0.62);
-  const logo = (color, h) => L.src
-    ? `<span class="logo" style="height:${h}px;aspect-ratio:${LR};background:${color}"></span>`
-    : `<span class="wordmark" style="font-size:${h}px;color:${color}">${esc(S.name)}</span>`;
-
-  /* palette size */
   let stash = [];
   function setCount(n) {
     if (n === S.colors.length) return;
     if (n < S.colors.length) {
-      const drop = S.colors.filter(c => c.role === 'support').slice(-(S.colors.length - n));
+      const drop = S.colors.filter(c => c.role === 'support' && !c.given).slice(-(S.colors.length - n));
       stash = drop; S.colors = S.colors.filter(c => !drop.includes(c));
     } else {
       const add = stash.length ? stash : [
@@ -188,48 +192,82 @@ button,input,select{font:inherit;color:inherit}
     }
   }
   function setRole(i, role) {
-    if (UNIQUE.includes(role)) {
-      const other = S.colors.find((c, j) => j !== i && c.role === role);
-      if (other) other.role = S.colors[i].role;
-    }
+    if (UNIQUE.includes(role)) { const other = S.colors.find((c, j) => j !== i && c.role === role); if (other) other.role = S.colors[i].role; }
     S.colors[i].role = role;
   }
 
-  /* render: panel */
-  let tab = 'colours', fontRole = 'display';
+  /* ---------- logo ---------- */
+  const L = S.logo || {};
+  if (L.src) document.documentElement.style.setProperty('--logo', `url("${L.src}")`);
+  const LR = L.src ? (L.ratio || 3) : Math.max(1.2, S.name.length * 0.62);
+  const logo = (color, h) => L.src
+    ? `<span class="logo" style="height:${h}px;aspect-ratio:${LR};background:${color}"></span>`
+    : `<span class="wordmark" style="font-size:${h}px;color:${color}">${esc(S.name)}</span>`;
+
+  /* ---------- panel ---------- */
+  let tab = (X.start === 'fonts') ? 'fonts' : 'colours', fontRole = 'display', query = '', catFilter = '';
+  const stack = fam => { const o = OWN.find(x => x.family === fam); const f = info(fam); return `'${esc(fam)}', ${o ? 'sans-serif' : (f ? CAT_FB[f.cat] : 'sans-serif')}`; };
+  const fcard = fam => { const f = info(fam); if (f) loadFont(fam, null, fam);
+    return `<button type="button" class="fcard" data-font="${esc(fam)}" aria-pressed="${(S.fonts[fontRole] || {}).family === fam}"><span class="fn" style="font-family:${stack(fam)}">${esc(fam)}</span><small>${f ? CAT_LABEL[f.cat] + ', ' + (f.weights.length > 1 ? f.weights.length + ' weights' : 'one weight') : 'Your font'}</small></button>`; };
+  function results() {
+    const q = query.trim().toLowerCase();
+    const rows = CATALOGUE.filter(f => (!catFilter || f.cat === catFilter) && (!q || f.family.toLowerCase().includes(q))).slice(0, 60);
+    return rows.length ? `<div class="fontgrid">${rows.map(f => fcard(f.family)).join('')}</div>` : '<p class="hint">No family by that name. Check the spelling on fonts.google.com.</p>';
+  }
   function panel() {
     const n = S.colors.length;
     const sum = S.colors.reduce((a, c) => a + (+c.share || 0), 0);
-    const colours = `<div class="section"><span class="label">Palette size</span>
+    const given = S.colors.some(c => c.given);
+    const colours = `${X.palettes && X.palettes.length ? `<div class="section"><span class="label">Proposals for your brief. Pick one, then adjust it below.</span>
+      <div class="cards">${X.palettes.map((p, i) => `<button type="button" class="pcard" data-palette="${i}" aria-pressed="${selPalette === i}"><span class="strip">${p.colors.map(c => `<span style="background:${c.hex}"></span>`).join('')}</span><span class="txt"><b>${esc(p.name)}</b>${p.why ? `<small>${esc(p.why)}</small>` : ''}</span></button>`).join('')}</div>
+      ${given ? '<p class="hint">Colours marked "yours" come from you and stay in every proposal.</p>' : ''}</div>` : ''}
+      <div class="section"><span class="label">Palette size</span>
       <div class="seg" role="group" aria-label="Palette size">${[6, 8].map(k => `<button type="button" data-count="${k}" aria-pressed="${n === k}">${k} colours</button>`).join('')}</div></div>
-      <div class="section"><span class="label">Colours: pick, name, give each one a role and a share of the page</span>
+      <div class="section"><span class="label">Each colour: pick it, name it, give it a role and a share of the page</span>
       ${S.colors.map((c, i) => `<div class="row">
         <input type="color" value="${c.hex}" data-i="${i}" data-k="hex" aria-label="${esc(c.name)} colour">
-        <div class="names"><input type="text" value="${esc(c.name)}" data-i="${i}" data-k="name" aria-label="Colour name"><input type="text" value="${c.hex.toUpperCase()}" data-i="${i}" data-k="hexText" aria-label="${esc(c.name)} hex value" spellcheck="false"></div>
+        <div class="names"><input type="text" value="${esc(c.name)}" data-i="${i}" data-k="name" aria-label="Colour name"><input type="text" value="${c.hex.toUpperCase()}" data-i="${i}" data-k="hexText" aria-label="${esc(c.name)} hex value" spellcheck="false">${c.given ? '<span class="yours">yours</span>' : ''}</div>
         <select data-i="${i}" data-k="role" aria-label="${esc(c.name)} role">${Object.keys(ROLES).map(r => `<option value="${r}"${c.role === r ? ' selected' : ''}>${ROLES[r]}</option>`).join('')}</select>
         <input type="number" min="0" max="100" value="${c.share || 0}" data-i="${i}" data-k="share" aria-label="${esc(c.name)} share of the page, percent">
       </div>`).join('')}
       <p class="sum${sum === 100 ? '' : ' bad'}">Shares add up to ${sum}%${sum === 100 ? '' : ', they should add up to 100%'}.</p></div>`;
-    const pairs = (S.explore && S.explore.pairings) || [];
-    const fonts = `${pairs.length ? `<div class="section"><span class="label">Suggested pairings</span><div class="chips">${pairs.map((p, i) => `<button type="button" class="chip" data-pair="${i}"><span style="font-family:'${esc(p.display)}';font-size:18px">${esc(p.display)}</span> + <span style="font-family:'${esc(p.text)}'">${esc(p.text)}</span>${p.why ? `<small>${esc(p.why)}</small>` : ''}</button>`).join('')}</div></div>` : ''}
+
+    const pairs = X.pairings || [];
+    const cur = S.fonts[fontRole];
+    const short = ((X.shortlist || {})[fontRole] || []).filter(f => info(f));
+    pairs.forEach(p => { [p.display, p.text].forEach(f => info(f) && loadFont(f)); });
+    const fonts = `${pairs.length ? `<div class="section"><span class="label">Proposals for your brief</span><div class="cards">${pairs.map((p, i) => {
+      const on = S.fonts.display && S.fonts.text && S.fonts.display.family === p.display && S.fonts.text.family === p.text;
+      return `<button type="button" class="pcard" data-pair="${i}" aria-pressed="${on}"><span class="txt"><span class="pair-sample" style="font-family:${stack(p.display)}">${esc(p.display)}</span><span style="font-family:${stack(p.text)};font-size:15px">with ${esc(p.text)}${p.mono ? ' and ' + esc(p.mono) : ''}</span>${p.why ? `<small>${esc(p.why)}</small>` : ''}</span></button>`; }).join('')}</div></div>` : ''}
       <div class="section"><span class="label">Choose a font for</span>
-      <div class="seg" role="group" aria-label="Font role">${[['display', 'Headlines'], ['text', 'Text'], ['mono', 'Mono']].map(([r, l]) => `<button type="button" data-role="${r}" aria-pressed="${fontRole === r}">${l}</button>`).join('')}</div></div>
-      <div class="section"><span class="label">Headline style</span>
+      <div class="seg" role="group" aria-label="Font role">${[['display', 'Headlines'], ['text', 'Text'], ['mono', 'Mono']].map(([r, l]) => `<button type="button" data-role="${r}" aria-pressed="${fontRole === r}">${l}</button>`).join('')}</div>
+      <span class="now">Now: ${cur ? esc(cur.family) : 'none'}</span>${fontRole === 'mono' && cur ? ' <button type="button" class="ghost" data-act="nomono" style="padding:3px 8px;margin-left:6px">Remove</button>' : ''}</div>
+      ${fontRole === 'display' ? `<div class="section"><span class="label">Headline style</span>
       <div class="seg" role="group" aria-label="Headline case">${[['none', 'Sentence case'], ['upper', 'Capitals']].map(([v, l]) => `<button type="button" data-case="${v}" aria-pressed="${(S.type.headlineCase || 'none') === v}">${l}</button>`).join('')}</div>
-      <div class="seg" role="group" aria-label="Headline weight" style="margin-left:6px">${[['regular', 'Regular'], ['strong', 'Bold']].map(([v, l]) => `<button type="button" data-hw="${v}" aria-pressed="${(v === 'strong') === (S.fonts.display.weight === Math.max(...S.fonts.display.weights) && S.fonts.display.weights.length > 1)}">${l}</button>`).join('')}</div></div>
-      ${['Serif', 'Sans', 'Display', 'Mono'].map(cat => `<p class="cat">${cat}</p><div class="fontgrid">${FONTS.filter(f => f.cat === cat).map(f => `<button type="button" class="fcard" data-font="${esc(f.family)}" aria-pressed="${(S.fonts[fontRole] || {}).family === f.family}"><span class="fn" style="font-family:'${esc(f.family)}',${FALLBACK[cat]}">${esc(f.family)}</span><small>${f.weights.length > 1 ? f.weights.length + ' weights' : 'One weight'}</small></button>`).join('')}</div>`).join('')}
-      <div class="section"><label class="label" for="custom">Another Google Font, by exact name</label><input id="custom" class="field" placeholder="e.g. Literata" spellcheck="false"></div>`;
-    return `<aside class="panel"><div class="panel-head"><h1>${esc(S.name)}, explorer</h1><p>Tune the palette and the fonts. The preview updates as you go. When it feels right, send your choices back.</p></div>
+      ${S.fonts.display && S.fonts.display.weights.length > 1 ? `<div class="seg" role="group" aria-label="Headline weight" style="margin-left:6px">${[['regular', 'Regular'], ['strong', 'Bold']].map(([v, l]) => `<button type="button" data-hw="${v}" aria-pressed="${(v === 'strong') === (S.fonts.display.weight === Math.max(...S.fonts.display.weights))}">${l}</button>`).join('')}</div>` : ''}</div>` : ''}
+      <div class="section"><span class="label">Your own fonts</span>
+      ${OWN.length ? `<div class="fontgrid" style="margin-bottom:8px">${OWN.map(o => fcard(o.family)).join('')}</div>` : ''}
+      <label class="filechip">Add a font file (.woff2, .woff, .otf, .ttf)<input type="file" id="fontfile" accept=".woff2,.woff,.otf,.ttf" multiple></label>
+      <div class="searchrow" style="margin-top:8px"><input id="installed" class="field" placeholder="Or the name of a font installed on this computer" spellcheck="false"><button type="button" class="ghost" data-act="installed">Add</button></div></div>
+      ${short.length ? `<div class="section"><span class="label">Picked for this brand</span><div class="fontgrid">${short.map(fcard).join('')}</div></div>` : ''}
+      <div class="section"><span class="label">Search all ${CATALOGUE.length} Google Fonts</span>
+      <div class="searchrow"><input id="q" class="field" type="search" value="${esc(query)}" placeholder="Family name" spellcheck="false" aria-label="Search Google Fonts"></div>
+      <div class="seg" role="group" aria-label="Category" style="margin-bottom:10px">${[['', 'All'], ['Serif', 'Serif'], ['Sans Serif', 'Sans'], ['Display', 'Display'], ['Handwriting', 'Script'], ['Monospace', 'Mono']].map(([v, l]) => `<button type="button" data-cat="${v}" aria-pressed="${catFilter === v}">${l}</button>`).join('')}</div>
+      <div id="results">${results()}</div></div>`;
+
+    return `<aside class="panel"><div class="panel-head"><h1>${esc(S.name)}, explorer</h1><p>Pick a direction, adjust it, and watch the preview. When it feels right, send your choices back.</p></div>
       <div class="tabs" role="tablist">${[['colours', 'Colours'], ['fonts', 'Fonts']].map(([k, l]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${tab === k}">${l}</button>`).join('')}</div>
       <div class="scroll">${tab === 'colours' ? colours : fonts}</div>
-      <div class="export"><button type="button" class="primary" data-act="copy">Copy my choices</button><button type="button" class="ghost" data-act="download">Download brand.json</button><p class="status" role="status" id="status">Paste the copied text back into the conversation, or say where the file was saved.</p></div></aside>`;
+      <div class="export"><button type="button" class="primary" data-act="copy">Copy my choices</button><button type="button" class="ghost" data-act="download">Download brand.json</button><p class="status" role="status" id="status">${ownFilesNote() || 'Paste the copied text back into the conversation, or say where the file was saved.'}</p></div></aside>`;
   }
+  const ownFiles = () => ['display', 'text', 'mono'].map(r => S.fonts[r]).filter(f => f && f.file).map(f => f.file);
+  const ownFilesNote = () => ownFiles().length ? `Also send ${[...new Set(ownFiles())].join(', ')}: font files do not travel in the copied text.` : '';
 
-  /* render: preview */
+  /* ---------- preview ---------- */
   function preview() {
     const C = { dark: byRole('dark'), light: byRole('light'), primary: byRole('primary'), accent: byRole('accent'), secondary: byRole('secondary') || byRole('primary') };
     const on = bg => ratio(bg, C.dark.hex) >= ratio(bg, C.light.hex) ? C.dark.hex : C.light.hex;
-    const F = S.fonts, st = f => f ? `"${f.family}", ${f.fallback || 'sans-serif'}` : null;
+    const F = S.fonts, st = f => f ? stack(f.family) : null;
     [F.display, F.text, F.mono].forEach(f => f && loadFont(f.family, f.weights));
     const r = document.documentElement.style, set = (k, v) => r.setProperty(k, v);
     set('--dark', C.dark.hex); set('--light', C.light.hex); set('--accent', C.accent.hex); set('--on-accent', on(C.accent.hex));
@@ -276,13 +314,13 @@ button,input,select{font:inherit;color:inherit}
     app.innerHTML = `<div class="app">${panel()}${preview()}</div>`;
     if (keepScroll) document.querySelector('.scroll').scrollTop = top;
   }
-  // font gallery: load only the letters of each family's own name
-  FONTS.forEach(f => loadFont(f.family, null, f.family));
   render();
 
-  /* events */
+  /* ---------- events ---------- */
   app.addEventListener('input', e => {
-    const t = e.target, i = +t.dataset.i, k = t.dataset.k;
+    const t = e.target;
+    if (t.id === 'q') { query = t.value; document.getElementById('results').innerHTML = results(); return; }
+    const i = +t.dataset.i, k = t.dataset.k;
     if (!k) return;
     const c = S.colors[i];
     if (k === 'hex') { c.hex = t.value.toUpperCase(); refresh(t); return; }
@@ -292,50 +330,75 @@ button,input,select{font:inherit;color:inherit}
   });
   // Re-render the preview only, so the field being typed in keeps its focus.
   function refresh(field) {
-    const pv = document.querySelector('.preview'); pv.outerHTML = preview();
+    selPalette = -1;
+    document.querySelector('.preview').outerHTML = preview();
+    document.querySelectorAll('[data-palette]').forEach(b => b.setAttribute('aria-pressed', 'false'));
     const sum = S.colors.reduce((a, c) => a + (+c.share || 0), 0);
     const s = document.querySelector('.sum'); if (s) { s.textContent = `Shares add up to ${sum}%${sum === 100 ? '' : ', they should add up to 100%'}.`; s.classList.toggle('bad', sum !== 100); }
-    if (field.dataset.k === 'hex') { const tx = field.closest('.row').querySelector('[data-k=hexText]'); tx.value = S.colors[+field.dataset.i].hex; }
-    if (field.dataset.k === 'hexText') { field.closest('.row').querySelector('[type=color]').value = S.colors[+field.dataset.i].hex; }
+    if (field.dataset.k === 'hex') field.closest('.row').querySelector('[data-k=hexText]').value = S.colors[+field.dataset.i].hex;
+    if (field.dataset.k === 'hexText') field.closest('.row').querySelector('[type=color]').value = S.colors[+field.dataset.i].hex;
   }
-  app.addEventListener('change', e => {
+  app.addEventListener('change', async e => {
     const t = e.target;
-    if (t.dataset.k === 'role') { setRole(+t.dataset.i, t.value); render(true); }
-    if (t.id === 'custom' && t.value.trim()) { S.fonts[fontRole] = { family: t.value.trim(), weights: [400], fallback: fontRole === 'mono' ? FALLBACK.Mono : FALLBACK.Sans }; if (fontRole === 'display') S.fonts.display.weight = 400; render(true); }
+    if (t.dataset.k === 'role') { setRole(+t.dataset.i, t.value); selPalette = -1; render(true); }
+    if (t.id === 'fontfile') {
+      for (const file of t.files) {
+        const family = file.name.replace(/\.(woff2?|otf|ttf)$/i, '').replace(/[-_]+/g, ' ').trim();
+        const src = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(file); });
+        const o = { family, file: file.name, src };
+        await addOwnFace(o);
+        if (!OWN.some(x => x.family === family)) OWN.push(o);
+        setFont(fontRole, family);
+      }
+      render(true);
+    }
   });
+  app.addEventListener('keydown', e => { if (e.target.id === 'installed' && e.key === 'Enter') addInstalled(); });
+  function addInstalled() {
+    const v = document.getElementById('installed').value.trim(); if (!v) return;
+    if (!OWN.some(o => o.family === v)) OWN.push({ family: v });
+    setFont(fontRole, v); render(true);
+  }
   app.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     const d = b.dataset;
     if (d.tab) { tab = d.tab; render(); }
-    else if (d.count) { setCount(+d.count); render(true); }
+    else if (d.palette) { selPalette = +d.palette; S.colors = clone(X.palettes[selPalette].colors); stash = []; render(true); }
+    else if (d.count) { setCount(+d.count); selPalette = -1; render(true); }
     else if (d.role) { fontRole = d.role; render(true); }
     else if (d.font) { setFont(fontRole, d.font); render(true); }
-    else if (d.pair) { const p = S.explore.pairings[+d.pair]; setFont('display', p.display); setFont('text', p.text); if (p.mono) setFont('mono', p.mono); render(true); }
+    else if (d.pair) { const p = X.pairings[+d.pair]; setFont('display', p.display); setFont('text', p.text); if (p.mono) setFont('mono', p.mono); render(true); }
+    else if (d.cat !== undefined) { catFilter = d.cat; render(true); }
     else if (d.case) { S.type.headlineCase = d.case; render(true); }
     else if (d.hw) { const w = S.fonts.display.weights; S.fonts.display.weight = d.hw === 'strong' ? Math.max(...w) : w[0]; render(true); }
+    else if (d.act === 'installed') addInstalled();
+    else if (d.act === 'nomono') { delete S.fonts.mono; render(true); }
     else if (d.act) exportChoices(d.act);
   });
 
   function payload() {
-    const out = JSON.parse(JSON.stringify(S));
+    const out = clone(S);
     if (out.logo) { delete out.logo.src; delete out.logo.ratio; }
+    ['display', 'text', 'mono'].forEach(r => { if (out.fonts[r]) delete out.fonts[r].src; });
+    ((out.imagery || {}).images || []).forEach(i => delete i.src);
     return JSON.stringify(out, null, 2);
   }
   async function exportChoices(kind) {
     const status = document.getElementById('status');
+    const tail = ownFilesNote() ? ' ' + ownFilesNote() : '';
     if (kind === 'download') {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(new Blob([payload()], { type: 'application/json' }));
       a.download = 'brand.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-      status.textContent = 'Saved as brand.json in your downloads. Tell the conversation where it is.';
+      status.textContent = 'Saved as brand.json in your downloads. Tell the conversation where it is.' + tail;
       return;
     }
     const text = 'Here are my explorer choices:\n\n```json\n' + payload() + '\n```';
-    try { await navigator.clipboard.writeText(text); status.textContent = 'Copied. Paste it back into the conversation.'; }
+    try { await navigator.clipboard.writeText(text); status.textContent = 'Copied. Paste it back into the conversation.' + tail; }
     catch (err) {
       const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
       const ok = document.execCommand('copy'); ta.remove();
-      status.textContent = ok ? 'Copied. Paste it back into the conversation.' : 'Copy was blocked by the browser. Use Download instead.';
+      status.textContent = ok ? 'Copied. Paste it back into the conversation.' + tail : 'Copy was blocked by the browser. Use Download instead.';
     }
   }
 })();

@@ -28,30 +28,28 @@ def ratio(a, b):
     return (x + 0.05) / (y + 0.05)
 
 
-def check(brand, base=Path(".")):
+def check_palette(colors, where=""):
+    """Structure and contrast of one palette. `where` prefixes every message."""
     fail, note = [], []
-    if not brand.get("name"):
-        fail.append("name is missing")
-    colors = brand.get("colors") or []
     if len(colors) not in (6, 8):
-        fail.append(f"the palette has {len(colors)} colours, it needs 6 or 8")
+        fail.append(f"{where}the palette has {len(colors)} colours, it needs 6 or 8")
     for c in colors:
         if not HEX.match(c.get("hex", "")):
-            fail.append(f"{c.get('name', '?')}: hex {c.get('hex')!r} is not #RRGGBB")
+            fail.append(f"{where}{c.get('name', '?')}: hex {c.get('hex')!r} is not #RRGGBB")
         if c.get("role") not in ROLES:
-            fail.append(f"{c.get('name', '?')}: role {c.get('role')!r} is not one of {', '.join(ROLES)}")
+            fail.append(f"{where}{c.get('name', '?')}: role {c.get('role')!r} is not one of {', '.join(ROLES)}")
     names = [c.get("name", "").lower() for c in colors]
     if len(set(names)) != len(names):
-        fail.append("two colours share a name")
+        fail.append(f"{where}two colours share a name")
     roles = [c.get("role") for c in colors]
     for r in UNIQUE:
         if roles.count(r) != 1:
-            fail.append(f"exactly one colour must have the role {r!r} (found {roles.count(r)})")
+            fail.append(f"{where}exactly one colour must have the role {r!r} (found {roles.count(r)})")
     if roles.count("secondary") > 1:
-        fail.append("at most one colour can be secondary")
+        fail.append(f"{where}at most one colour can be secondary")
     share = sum(c.get("share", 0) for c in colors)
     if share != 100:
-        fail.append(f"colour shares add up to {share}%, they must add up to 100%")
+        fail.append(f"{where}colour shares add up to {share}%, they must add up to 100%")
     if fail:  # contrast checks need a valid palette
         return fail, note
 
@@ -69,14 +67,72 @@ def check(brand, base=Path(".")):
     ]
     for label, r, hard, soft in tests:
         if r < hard:
-            fail.append(f"contrast of {label} is {r:.2f}, needs {hard}")
+            fail.append(f"{where}contrast of {label} is {r:.2f}, needs {hard}")
         elif r < soft:
-            note.append(f"contrast of {label} is {r:.2f}, {soft} would be safer")
+            note.append(f"{where}contrast of {label} is {r:.2f}, {soft} would be safer")
+    return fail, note
+
+
+def catalogue():
+    path = Path(__file__).resolve().parent.parent / "assets" / "fonts.json"
+    if not path.exists():
+        return None
+    return {r[0].lower(): r for r in json.loads(path.read_text(encoding="utf-8"))}
+
+
+def check_font(font, where, cat, base):
+    fail = []
+    fam = (font or {}).get("family")
+    if not fam:
+        return [f"{where}.family is missing"]
+    if font.get("file"):
+        p = base / font["file"]
+        if not p.exists():
+            fail.append(f"{where}: font file {p} does not exist")
+        elif p.suffix.lower() not in (".woff2", ".woff", ".otf", ".ttf"):
+            fail.append(f"{where}: {p.name} must be WOFF2, WOFF, OTF or TTF")
+    elif not font.get("local") and cat is not None:
+        row = cat.get(fam.lower())
+        if not row:
+            fail.append(f"{where}: {fam!r} is not on Google Fonts (check the spelling, or mark it local)")
+        else:
+            missing = [w for w in font.get("weights") or [] if w not in row[2]]
+            if missing:
+                fail.append(f"{where}: {fam} has no weight {', '.join(map(str, missing))} (it ships {' '.join(map(str, row[2]))})")
+    return fail
+
+
+def check(brand, base=Path(".")):
+    fail, note = [], []
+    if not brand.get("name"):
+        fail.append("name is missing")
+    explore = brand.get("explore") or {}
+    colors = brand.get("colors") or []
+    for i, pal in enumerate(explore.get("palettes") or []):
+        f, n = check_palette(pal.get("colors") or [], f"proposal {pal.get('name') or i + 1}: ")
+        fail += f
+        note += n
+    if colors or not explore.get("palettes"):
+        f, n = check_palette(colors)
+        fail += f
+        note += n
+    names = [c.get("name", "").lower() for c in colors or (explore.get("palettes") or [{}])[0].get("colors", [])]
 
     fonts = brand.get("fonts") or {}
-    for role in ("display", "text"):
-        if not (fonts.get(role) or {}).get("family"):
-            fail.append(f"fonts.{role}.family is missing")
+    cat = catalogue()
+    if cat is None:
+        note.append("assets/fonts.json is missing: font names were not checked (run fonts.py refresh)")
+    for role in ("display", "text", "mono"):
+        if role in fonts or role != "mono":
+            fail += check_font(fonts.get(role), f"fonts.{role}", cat, base)
+    for p in explore.get("pairings") or []:
+        for role in ("display", "text", "mono"):
+            if p.get(role) and cat is not None and p[role].lower() not in cat:
+                fail.append(f"pairing {p.get('display')} + {p.get('text')}: {p[role]!r} is not on Google Fonts")
+    for role, fams in (explore.get("shortlist") or {}).items():
+        for fam in fams:
+            if cat is not None and fam.lower() not in cat:
+                note.append(f"shortlist {role}: {fam!r} is not on Google Fonts, the explorer will skip it")
     for lvl in (brand.get("type") or {}).get("scale") or []:
         if lvl.get("size", 12) < 12:
             fail.append(f"type level {lvl.get('level')} is {lvl.get('size')} px, the floor is 12 px")
@@ -118,13 +174,27 @@ def selftest():
         {"name": "D", "hex": "#A33A1A", "role": "accent", "share": 5},
         {"name": "E", "hex": "#DDDDDD", "role": "secondary", "share": 3},
         {"name": "F", "hex": "#888888", "role": "support", "share": 2}],
-        "fonts": {"display": {"family": "X"}, "text": {"family": "Y"}}}
+        "fonts": {"display": {"family": "Lora", "weights": [400, 700]}, "text": {"family": "Inter", "weights": [400, 600]}}}
     assert check(ok)[0] == [], check(ok)[0]
     bad = json.loads(json.dumps(ok))
     bad["colors"][3]["hex"] = "#F0B0A0"
     assert any("button" in f for f in check(bad)[0])
     bad["colors"].pop()
     assert any("6 or 8" in f for f in check(bad)[0])
+    if catalogue() is not None:
+        typo = json.loads(json.dumps(ok))
+        typo["fonts"]["display"] = {"family": "Lorra"}
+        typo["fonts"]["text"]["weights"] = [400, 1000]
+        f = check(typo)[0]
+        assert any("Lorra" in x for x in f) and any("no weight 1000" in x for x in f), f
+        own = json.loads(json.dumps(ok))
+        own["fonts"]["display"] = {"family": "House Serif", "local": True}
+        assert check(own)[0] == [], check(own)[0]
+    prop = json.loads(json.dumps(ok))
+    prop["explore"] = {"palettes": [{"name": "A", "colors": ok["colors"]}, {"name": "B", "colors": bad["colors"]}]}
+    del prop["colors"]
+    f = check(prop)[0]
+    assert f and all(x.startswith("proposal B: ") for x in f), f
     print("selftest ok")
 
 
