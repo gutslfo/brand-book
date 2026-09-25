@@ -11,7 +11,8 @@ Turns what a person already knows about their brand, and a few answers about wha
 yet, into a brand book that reads as commissioned: the chapters, rules and numbers the largest brands
 publish, applied to a new brand, printable on A4 and readable on a phone.
 
-**Licence:** MIT. Use, change and share it freely; keep the copyright notice.
+**Licence:** CC BY-NC 4.0. Share and adapt it for non-commercial purposes, with credit to Pierre
+Tran / Taykon Studio. Commercial use needs written permission (taykon.studio).
 
 **Feedback:** questions about the method, or feedback on a book it produced, go to
 [github.com/gutslfo/brand-book/issues](https://github.com/gutslfo/brand-book/issues), or to taykon.studio.
