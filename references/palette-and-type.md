@@ -1,7 +1,19 @@
-# Proposing a palette and a type pairing
+# Proposing palettes and type pairings
 
-Read this in Phase 2, before writing the seed `brand.json`. The goal is a first proposal good enough that
-the explorer round is fine-tuning, not starting over.
+Read this in Phase 3, before writing the seed `brand.json`. The goal is proposals good enough that the
+picker round is choosing and fine-tuning, not starting over.
+
+## Three directions, not three shades
+
+When colours are missing, write three palettes in `explore.palettes`, each `{name, why, colors}`. They
+must differ in character: for a warm brief, one earth-led, one led by a green or a blue, one quieter and
+darker. Three variations of the same brown are one proposal. Give each a short name and a one-line
+reason tied to the user's words ("Green leads, like a market stall awning").
+
+Colours the user already has go into every proposal, unchanged, with `"given": true`. Build the missing
+roles around them: if their colour is a strong mid-tone, it is the `primary`; if it is very dark or very
+light, it is a base. A refused colour appears in no proposal. The first proposal is the one you
+recommend.
 
 ## The palette, role by role
 
@@ -28,8 +40,28 @@ fails contrast wastes the user's first look.
 
 ## The type pairing
 
-Pick two families (three with a mono) with a clear job each. Offer three pairings in
+Pick two families (three with a mono) with a clear job each. Offer three or four pairings in
 `explore.pairings`, each with a one-line reason, so the user chooses between directions, not fonts.
+Then write a shortlist of about six families per role in `explore.shortlist` (`display`, `text`,
+optionally `mono`): the picker shows them as "Picked for this brand", above the search.
+
+Research with the catalogue, not from memory alone. `scripts/fonts.py search` filters the 1,600 Latin
+families of Google Fonts by category and number of weights, sorted by popularity:
+
+```
+python <skill-dir>/scripts/fonts.py search --category serif --weights 2 --skip-top 30
+python <skill-dir>/scripts/fonts.py search --category sans --weights 3 --skip-top 30 --limit 60
+python <skill-dir>/scripts/fonts.py check "Young Serif" "Figtree"
+```
+
+`--skip-top 30` leaves out the thirty most used families (Roboto, Open Sans, Montserrat, Poppins and
+the like), which is how a proposal avoids looking like every generated site. Combine the list with what
+you know of each face's character, and run `check` on every family you write down: a wrong name or a
+weight the family does not ship stops the font from loading.
+
+Fonts the user already has stay in place. If they gave one role (a headline face), pair it: the three
+pairings keep their font and vary the other role. Their own files go in `fonts.<role>.file`, their
+installed fonts get `"local": true`.
 
 | Style words | Display | Text | Mono |
 |---|---|---|---|
@@ -48,10 +80,11 @@ Pairing rules:
   look alike.
 - The text family needs at least two weights. Display-only faces (Anton, Bebas Neue, Instrument Serif,
   DM Serif Display, Gloock, Young Serif) never set body text.
-- A face from the explorer's catalogue loads with verified weights. Anything else: the user types its
-  exact Google Fonts name, and it loads at 400 only.
-- A licensed font the user owns: set `"local": true` on that role and tell them to add its `@font-face`
-  to the built page, or to install it on the machine that opens the book. The book cannot fetch it.
+- Weights come from the catalogue: two per family, regular plus the nearest strong weight it ships. The
+  picker does this on its own when the user clicks a family.
+- A licensed font the user owns as a file (WOFF2, WOFF, OTF, TTF): put the file in the brand folder and
+  set `fonts.<role>.file`. The build embeds it, so the book shows it on any machine. A font only
+  installed on their computer: `"local": true`, and it shows on that computer only.
 - Avoid defaulting to the most common generated pairings (Inter with Playfair Display, Poppins with
   anything). Offer them only when the brief really points there.
 

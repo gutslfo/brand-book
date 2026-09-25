@@ -1,8 +1,9 @@
-# The interview
+# The refinement interview
 
-Read this at the start of Phase 4. The interview turns taste into decisions: for every chapter, what the
-brand should look like and what it must never look like. Each answer is written into `brand.json` the
-moment it is given, so nothing lives only in the conversation.
+Read this in Phase 6, only if the user wants to go through the book after it is built. The first book is
+drafted from the intake; this interview is how the user takes ownership of its words and rules, chapter
+by chapter: what the brand should look like and what it must never look like. Each answer is written
+into `brand.json` the moment it is given, then the book is rebuilt. The user can stop after any chapter.
 
 ## How to ask
 
@@ -14,17 +15,14 @@ moment it is given, so nothing lives only in the conversation.
 - **Draft the copy yourself.** Purpose lines, voice pairs, rules and never-lines are proposed by you and
   corrected by the user. Follow the canon's house rules when drafting: no italics, no exclamation marks
   in brand lines, plain words.
-- **"Decide for me" is a valid answer.** Take the recommended option, say so in one line, move on. If the
-  user says it for the whole interview, fill every field with the recommendations and go straight to the
-  page plan.
+- **"Decide for me" is a valid answer.** Keep the current draft, say so in one line, move on. If the
+  user says it for a whole chapter, skip to the next one.
 - **Name the field.** End each question with the page it shapes ("This goes on the Essence page."), so
   the user sees the book being built.
 - **Keep a running tally.** Every five questions, one line: what is settled, what is left.
 
-## Opening question: references
-
-"Name two or three brands, from any sector, whose look you admire, and one or two you would hate to be
-confused with." Use the answer to calibrate every later proposal. It is not written into the book.
+Skip any question the user already answered in the intake (see `brand.json` under `intake`), and show
+the current draft as the recommended option: the user is correcting a draft, not starting over.
 
 ## Essence (pages: Essence, Voice)
 
@@ -94,8 +92,6 @@ confused with." Use the answer to calibrate every later proposal. It is not writ
     the reference brands the user did not want to be confused with, then ask what to add or cut.
     → `never`
 
-## The page plan
+## After the last answer
 
-After the last answer, print the plan before building: every page, what it shows, and where its content
-comes from. Use the page list in `schema.md`. Ask for a yes or corrections. Nothing is built before the
-yes.
+Rebuild the book, run the pre-flight again, and send the new link.

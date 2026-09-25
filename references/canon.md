@@ -1,6 +1,6 @@
 # The canon: what the world's biggest brands put in their guidelines
 
-Read this before the interview (Phase 4) and before writing any rule into `brand.json`. Every default
+Read this before drafting the book's words and rules (Phase 5) and before writing any rule into `brand.json`. Every default
 in this skill traces back to a line in this file. When a user asks "why is it like that?", the answer
 is here.
 

@@ -257,7 +257,8 @@ figure{min-width:0}
   const minW = L.minWidthPx || (L.src ? 96 : 80);
   // The book never shows the logo below its own minimum size, except on the misuse tile that says so.
   function logo(color, h, style = '', tiny = false) {
-    if (!tiny) h = `max(${(minW / R).toFixed(1)}px, ${h})`;
+    // a wordmark is text: its floor is also the 12 px text floor
+    if (!tiny) h = `max(${(L.src ? minW / R : Math.max(12, minW / R)).toFixed(1)}px, ${h})`;
     const grad = color.includes('gradient');
     const mark = tiny ? ' data-intentional="below minimum size, on purpose"' : '';
     if (L.src) return `<span class="logo"${mark} role="img" aria-label="${esc(B.name)} logo" style="height:${h};aspect-ratio:${R};background:${color};${style}"></span>`;

@@ -211,6 +211,7 @@ button,input,select{font:inherit;color:inherit}
     return `<button type="button" class="fcard" data-font="${esc(fam)}" aria-pressed="${(S.fonts[fontRole] || {}).family === fam}"><span class="fn" style="font-family:${stack(fam)}">${esc(fam)}</span><small>${f ? CAT_LABEL[f.cat] + ', ' + (f.weights.length > 1 ? f.weights.length + ' weights' : 'one weight') : 'Your font'}</small></button>`; };
   function results() {
     const q = query.trim().toLowerCase();
+    if (!q && !catFilter) return '<p class="hint">Type a name, or pick a category to browse it by popularity.</p>';
     const rows = CATALOGUE.filter(f => (!catFilter || f.cat === catFilter) && (!q || f.family.toLowerCase().includes(q))).slice(0, 60);
     return rows.length ? `<div class="fontgrid">${rows.map(f => fcard(f.family)).join('')}</div>` : '<p class="hint">No family by that name. Check the spelling on fonts.google.com.</p>';
   }

@@ -29,14 +29,16 @@ Required fields are marked. Everything else has a default, shown in the last col
 | `logo.backgrounds` | list of colour names | The closed list of approved backgrounds. | colours at 3:1 or more |
 | `logo.misuse` | list | Any of `stretch rotate recolor effects busy contrast crowd small`. | all eight |
 | `logo.note`, `logo.crowdText` | string | Text on the logo page, text in the crowding tile. | generic lines |
-| `colors` | list, required | 6 or 8 of `{name, hex, role, share, use}`. | |
+| `colors` | list, required for the book | 6 or 8 of `{name, hex, role, share, use, given}`. The picker fills it from the first proposal when it is missing. | |
+| `colors[].given` | bool | The user brought this colour: it stays in every proposal and is marked "yours". | false |
 | `colors[].role` | required | Exactly one each of `dark`, `light`, `primary`, `accent`. At most one `secondary`. The rest `support`. | |
 | `colors[].share` | integer | Percent of a typical page. All shares add up to 100. | |
 | `fonts.display`, `fonts.text` | object, required | `{family, weights, weight, fallback, role, local}` | |
 | `fonts.mono` | object | Same shape. Omit for a two-family system. | none |
 | `fonts.*.weights` | list | The weights to load, two per family. | `[400]` |
 | `fonts.display.weight` | number | The weight headlines use. | first weight |
-| `fonts.*.local` | bool | True for a licensed font the page cannot fetch. | false |
+| `fonts.*.file` | path | The user's own font file (WOFF2, WOFF, OTF, TTF), embedded at build. | none |
+| `fonts.*.local` | bool | True for a font that is not on Google Fonts: a file, or a font installed on the user's machine. | false |
 | `type.headlineCase` | `none` or `upper` | Sentence case or capitals for headlines. | `none` |
 | `type.headlineTracking` | number, em | Letter spacing for headlines. | -0.015, or 0.04 in capitals |
 | `type.scale` | list of `{level, font, size, leading, tracking}` | Five levels. Sizes in px, 12 or more. | 72 / 44 / 28 / 16 / 13 |
@@ -52,11 +54,16 @@ Required fields are marked. Everything else has a default, shown in the last col
 | `never` | list | The Never page. Six to eight lines. | |
 | `chapters` | object | Override a chapter's divider line, keyed by chapter name. | generic lines |
 | `paletteNote`, `neverNote` | string | Intro lines on those pages. | generic lines |
-| `explore.pairings` | list of `{display, text, mono, why}` | Suggested pairings in the explorer. | none |
+| `explore.palettes` | list of `{name, why, colors}` | The three palette directions in the picker. Given colours appear in each. | none |
+| `explore.pairings` | list of `{display, text, mono, why}` | The font pairings in the picker. | none |
+| `explore.shortlist` | `{display, text, mono}` lists | About six families per role, shown as "Picked for this brand". | none |
+| `explore.start` | `colours` or `fonts` | Which tab the picker opens on. Use `fonts` when only fonts are missing. | `colours` |
+| `intake` | object | The user's answers (`feeling`, `lightness`, `colour`, `typeVoice`, `admire`, `avoid`), kept for drafting the book's words. Not rendered. | none |
 
 ## The pages
 
-Show this list as the page plan in Phase 5, with the brand's own content in the third column.
+What each page shows and which fields feed it. Use it to draft the fields in Phase 5, and to walk the
+user through the book in Phase 6.
 
 | Page | Title | Shows | From |
 |---|---|---|---|
