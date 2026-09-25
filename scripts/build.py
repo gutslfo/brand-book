@@ -3,8 +3,9 @@
     python build.py explorer path/to/brand.json [-o explorer.html]
     python build.py book     path/to/brand.json [-o brand-book.html]
 
-The logo path in brand.json ("logo": {"file": "logo.svg"}) is resolved relative to
-brand.json, embedded as a data URI, and its aspect ratio is measured. Stdlib only.
+File paths in brand.json (logo.file, imagery.images[].file) are resolved relative to
+brand.json and embedded as data URIs, so the page is one self-contained file. The
+logo's aspect ratio is measured. Stdlib only.
 """
 import argparse, base64, json, re, struct, sys
 from pathlib import Path
@@ -40,23 +41,28 @@ def raster_ratio(data):
     raise ValueError("unsupported image: use SVG, PNG or JPEG")
 
 
-def embed_logo(brand, base):
-    logo = brand.get("logo") or {}
-    if not logo.get("file"):
-        return brand
-    path = (base / logo["file"]).resolve()
+def data_uri(path, what):
     ext = path.suffix.lower()
     if ext not in MIME:
-        sys.exit(f"logo: {path.name} is not SVG, PNG or JPEG")
+        sys.exit(f"{what}: {path.name} is not SVG, PNG or JPEG")
     data = path.read_bytes()
-    logo["ratio"] = round(svg_ratio(data.decode("utf-8")) if ext == ".svg" else raster_ratio(data), 4)
-    logo["src"] = f"data:{MIME[ext]};base64,{base64.b64encode(data).decode()}"
+    return data, ext, f"data:{MIME[ext]};base64,{base64.b64encode(data).decode()}"
+
+
+def embed_files(brand, base):
+    logo = brand.get("logo") or {}
+    if logo.get("file"):
+        data, ext, logo["src"] = data_uri((base / logo["file"]).resolve(), "logo")
+        logo["ratio"] = round(svg_ratio(data.decode("utf-8")) if ext == ".svg" else raster_ratio(data), 4)
+    for img in (brand.get("imagery") or {}).get("images") or []:
+        if img.get("file"):
+            img["src"] = data_uri((base / img["file"]).resolve(), "image")[2]
     return brand
 
 
 def build(kind, brand_path, out=None):
     brand_path = Path(brand_path).resolve()
-    brand = embed_logo(json.loads(brand_path.read_text(encoding="utf-8")), brand_path.parent)
+    brand = embed_files(json.loads(brand_path.read_text(encoding="utf-8")), brand_path.parent)
     template = (ASSETS / TEMPLATES[kind]).read_text(encoding="utf-8")
     payload = json.dumps(brand, ensure_ascii=False).replace("</", "<\\/")
     if "/*__BRAND__*/null" not in template:
