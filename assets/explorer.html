@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+/* Explorer: tune the palette and the fonts, see them live, send the choices back.
+   The tool's own interface stays neutral so the brand is the only colour on screen. */
+:root{
+  --ui-bg:#f4f4f2;--ui-panel:#ffffff;--ui-ink:#1b1b1a;--ui-soft:#5f5e5a;--ui-line:#e2e1dc;--ui-focus:#2458d6;
+  --ui-font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ui-bg);color:var(--ui-ink);font:14px/1.45 var(--ui-font);font-synthesis:none;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ui-focus);outline-offset:2px}
+.app{display:grid;grid-template-columns:420px minmax(0,1fr);min-height:100vh}
+.empty{padding:48px;max-width:40em}
+
+/* panel */
+.panel{background:var(--ui-panel);border-right:1px solid var(--ui-line);height:100vh;position:sticky;top:0;display:flex;flex-direction:column}
+.panel-head{padding:20px 20px 12px}
+.panel-head h1{font-size:18px;font-weight:600;line-height:1.3}
+.panel-head p{color:var(--ui-soft);margin-top:4px}
+.tabs{display:flex;gap:4px;padding:0 20px;border-bottom:1px solid var(--ui-line)}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 8px;cursor:pointer;color:var(--ui-soft)}
+.tabs button[aria-selected="true"]{color:var(--ui-ink);border-bottom-color:var(--ui-ink);font-weight:600}
+.scroll{flex:1;overflow:auto;padding:16px 20px 24px}
+.section+.section{margin-top:24px}
+.label{font-size:12px;color:var(--ui-soft);margin-bottom:8px;display:block}
+.seg{display:inline-flex;border:1px solid var(--ui-line);border-radius:6px;overflow:hidden}
+.seg button{background:none;border:0;padding:6px 12px;cursor:pointer;color:var(--ui-soft)}
+.seg button[aria-pressed="true"]{background:var(--ui-ink);color:#fff}
+.row{display:grid;grid-template-columns:40px minmax(0,1fr) 108px 52px;gap:6px;align-items:center;padding:6px 0;border-top:1px solid var(--ui-line)}
+.row input[type=color]{width:40px;height:40px;border:1px solid var(--ui-line);border-radius:6px;padding:2px;background:none;cursor:pointer}
+.row .names{display:flex;flex-direction:column;gap:2px;min-width:0}
+.row input[type=text],.row input[type=number],.row select,.field{border:1px solid var(--ui-line);border-radius:6px;padding:5px 7px;background:#fff;min-width:0;width:100%}
+.row .names input{border-color:transparent;padding:2px 6px}
+.row .names input:hover{border-color:var(--ui-line)}
+.row select{padding:5px 4px}
+.sum{margin-top:8px;color:var(--ui-soft)}
+.sum.bad{color:#b3261e}
+.chips{display:flex;flex-direction:column;gap:6px}
+.chip{border:1px solid var(--ui-line);border-radius:8px;padding:10px 12px;background:#fff;cursor:pointer;text-align:left}
+.chip:hover{border-color:var(--ui-ink)}
+.chip small{display:block;color:var(--ui-soft);font-size:12px}
+.fontgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fcard{border:1px solid var(--ui-line);border-radius:8px;padding:10px;background:#fff;cursor:pointer;text-align:left;min-width:0}
+.fcard:hover{border-color:var(--ui-soft)}
+.fcard[aria-pressed="true"]{border-color:var(--ui-ink);box-shadow:inset 0 0 0 1px var(--ui-ink)}
+.fcard .fn{font-size:20px;line-height:1.2;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fcard small{color:var(--ui-soft);font-size:12px}
+.cat{margin:16px 0 8px;font-size:12px;color:var(--ui-soft)}
+.export{border-top:1px solid var(--ui-line);padding:14px 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.primary{background:var(--ui-ink);color:#fff;border:0;border-radius:6px;padding:9px 14px;cursor:pointer;font-weight:600}
+.ghost{background:none;border:1px solid var(--ui-line);border-radius:6px;padding:8px 12px;cursor:pointer}
+.status{color:var(--ui-soft);font-size:12px;flex-basis:100%}
+
+/* preview */
+.preview{padding:32px;display:flex;flex-direction:column;gap:24px;min-width:0}
+.card{background:var(--light);color:var(--dark);border-radius:4px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 28px rgba(0,0,0,.06)}
+.pad{padding:clamp(20px,4vw,48px)}
+.caption{font:12px/1.4 var(--ui-font);color:var(--ui-soft);margin-top:8px}
+.h-display,.h-title{font-family:var(--f-display);font-weight:var(--w-display);letter-spacing:var(--track);text-transform:var(--case);text-wrap:balance}
+.h-display{font-size:clamp(34px,5.4vw,76px);line-height:1.04}
+.h-title{font-size:clamp(22px,2.4vw,32px);line-height:1.15}
+.t-body{font-family:var(--f-text);font-size:16px;line-height:1.55;max-width:60ch}
+.t-meta{font-family:var(--f-text);font-size:13px;line-height:1.4}
+.mono{font-family:var(--f-mono)}
+.logo{display:inline-block;flex:none;vertical-align:middle;-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
+.wordmark{display:inline-block;font-family:var(--f-display);font-weight:var(--w-display-strong);letter-spacing:var(--track);line-height:1;white-space:nowrap}
+.cover{aspect-ratio:297/150;display:flex;flex-direction:column;justify-content:space-between}
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:end}
+.site-nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid color-mix(in srgb,var(--dark) 12%,transparent)}
+.site-nav nav{display:flex;gap:20px;align-items:center}
+.btn{display:inline-block;background:var(--accent);color:var(--on-accent);padding:10px 16px;border-radius:var(--radius);font:600 14px/1 var(--f-text)}
+.site-hero{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;padding:40px 24px}
+.panel-sec{background:var(--secondary);color:var(--on-secondary);padding:20px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;min-height:200px}
+.swatches{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr))}
+.sw{aspect-ratio:3/4;padding:12px;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.sw b{font:var(--w-display) 18px/1.1 var(--f-display);overflow:hidden;text-overflow:ellipsis}
+.bar{display:flex;height:14px}
+.logos{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr))}
+.logos div{aspect-ratio:1.4;display:flex;align-items:center;justify-content:center;padding:10px}
+.checks{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.checks li{border-top:1px solid color-mix(in srgb,var(--dark) 15%,transparent);padding:8px 0;display:flex;justify-content:space-between;gap:12px}
+.ok{font-weight:600}
+.warn{font-weight:600;color:#b3261e}
+
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .panel{position:static;height:auto;border-right:0;border-bottom:1px solid var(--ui-line)}
+  .scroll{overflow:visible}
+  .preview{padding:16px}
+  .two,.site-hero,.checks{grid-template-columns:1fr}
+  .swatches,.logos{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>window.BRAND = /*__BRAND__*/null;</script>
+<script>
+(function () {
+  const app = document.getElementById('app');
+  if (!window.BRAND) { app.innerHTML = '<p class="empty">This is the empty explorer. Build it with <code>python scripts/build.py explorer brand.json</code>.</p>'; return; }
+  const S = JSON.parse(JSON.stringify(window.BRAND));
+  S.type = S.type || {};
+
+  /* Curated Google Fonts. Weights listed are the ones each family actually ships between 300 and 800. */
+  const R5 = [300, 400, 500, 600, 700, 800];
+  const FONTS = [
+    ['Newsreader', 'Serif', R5], ['Fraunces', 'Serif', R5], ['Source Serif 4', 'Serif', R5], ['Spectral', 'Serif', R5],
+    ['EB Garamond', 'Serif', [400, 500, 600, 700, 800]], ['Cormorant Garamond', 'Serif', [300, 400, 500, 600, 700]],
+    ['Playfair Display', 'Serif', [400, 500, 600, 700, 800]], ['Bodoni Moda', 'Serif', [400, 500, 600, 700, 800]],
+    ['Crimson Pro', 'Serif', R5], ['Lora', 'Serif', [400, 500, 600, 700]], ['Libre Caslon Text', 'Serif', [400, 700]],
+    ['Young Serif', 'Serif', [400]], ['Gloock', 'Serif', [400]], ['DM Serif Display', 'Serif', [400]], ['Instrument Serif', 'Serif', [400]],
+    ['Inter', 'Sans', R5], ['Hanken Grotesk', 'Sans', R5], ['IBM Plex Sans', 'Sans', [300, 400, 500, 600, 700]], ['DM Sans', 'Sans', R5],
+    ['Manrope', 'Sans', R5], ['Plus Jakarta Sans', 'Sans', R5], ['Work Sans', 'Sans', R5], ['Public Sans', 'Sans', R5],
+    ['Schibsted Grotesk', 'Sans', [400, 500, 600, 700, 800]], ['Instrument Sans', 'Sans', [400, 500, 600, 700]], ['Figtree', 'Sans', R5],
+    ['Outfit', 'Sans', R5], ['Sora', 'Sans', R5], ['Onest', 'Sans', R5], ['Familjen Grotesk', 'Sans', [400, 500, 600, 700]],
+    ['Space Grotesk', 'Display', [300, 400, 500, 600, 700]], ['Archivo', 'Display', R5], ['Syne', 'Display', [400, 500, 600, 700, 800]],
+    ['Bricolage Grotesque', 'Display', R5], ['Unbounded', 'Display', R5], ['Darker Grotesque', 'Display', R5],
+    ['Oswald', 'Display', [300, 400, 500, 600, 700]], ['Anton', 'Display', [400]], ['Bebas Neue', 'Display', [400]], ['Archivo Black', 'Display', [400]],
+    ['JetBrains Mono', 'Mono', R5], ['IBM Plex Mono', 'Mono', [300, 400, 500, 600, 700]], ['DM Mono', 'Mono', [300, 400, 500]],
+    ['Space Mono', 'Mono', [400, 700]], ['Geist Mono', 'Mono', R5], ['Fragment Mono', 'Mono', [400]],
+  ].map(([family, cat, weights]) => ({ family, cat, weights }));
+  const FALLBACK = { Serif: 'Georgia, serif', Sans: 'system-ui, sans-serif', Display: 'system-ui, sans-serif', Mono: 'ui-monospace, monospace' };
+  const fontInfo = fam => FONTS.find(f => f.family === fam);
+
+  /* helpers */
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const rgb = h => { h = h.replace('#', ''); if (h.length === 3) h = [...h].map(c => c + c).join(''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
+  const hex = a => '#' + a.map(v => Math.round(v).toString(16).padStart(2, '0')).join('').toUpperCase();
+  const mix = (a, b, t) => hex(rgb(a).map((v, i) => v + (rgb(b)[i] - v) * t));
+  const lum = h => { const [r, g, b] = rgb(h).map(v => { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const byRole = r => S.colors.find(c => c.role === r);
+  const UNIQUE = ['dark', 'light', 'primary', 'secondary', 'accent'];
+  const ROLES = { dark: 'Dark base', light: 'Light base', primary: 'Primary', secondary: 'Secondary', accent: 'Accent', support: 'Support' };
+  const loaded = new Set();
+  function loadFont(family, weights, text) {
+    const key = family + (weights || []).join() + (text || '');
+    if (loaded.has(key)) return; loaded.add(key);
+    const q = encodeURIComponent(family).replace(/%20/g, '+') + (weights && weights.length ? ':wght@' + weights.join(';') : '');
+    const l = document.createElement('link'); l.rel = 'stylesheet';
+    l.href = `https://fonts.googleapis.com/css2?family=${q}${text ? '&text=' + encodeURIComponent(text) : ''}&display=swap`;
+    document.head.appendChild(l);
+  }
+  // Two weights per family: regular plus the nearest strong weight it ships.
+  function pickWeights(info, role) {
+    const w = info ? info.weights : [400];
+    if (role === 'mono') return [w.includes(400) ? 400 : w[0]];
+    const strong = [600, 700, 500].find(x => w.includes(x));
+    return [...new Set([w.includes(400) ? 400 : w[0], strong || w[w.length - 1]])];
+  }
+  function setFont(role, family) {
+    const info = fontInfo(family);
+    const cur = S.fonts[role] || {};
+    S.fonts[role] = Object.assign({}, cur, { family, weights: pickWeights(info, role), fallback: info ? FALLBACK[info.cat] : (cur.fallback || 'sans-serif') });
+    if (role === 'display') S.fonts.display.weight = S.fonts.display.weights[0];
+  }
+
+  /* logo */
+  const L = S.logo || {};
+  if (L.src) document.documentElement.style.setProperty('--logo', `url("${L.src}")`);
+  const LR = L.src ? (L.ratio || 3) : Math.max(1.2, S.name.length * 0.62);
+  const logo = (color, h) => L.src
+    ? `<span class="logo" style="height:${h}px;aspect-ratio:${LR};background:${color}"></span>`
+    : `<span class="wordmark" style="font-size:${h}px;color:${color}">${esc(S.name)}</span>`;
+
+  /* palette size */
+  let stash = [];
+  function setCount(n) {
+    if (n === S.colors.length) return;
+    if (n < S.colors.length) {
+      const drop = S.colors.filter(c => c.role === 'support').slice(-(S.colors.length - n));
+      stash = drop; S.colors = S.colors.filter(c => !drop.includes(c));
+    } else {
+      const add = stash.length ? stash : [
+        { name: 'Tint', hex: mix(byRole('primary').hex, byRole('light').hex, 0.72), role: 'support', share: 2, use: '' },
+        { name: 'Stone', hex: mix(byRole('dark').hex, byRole('light').hex, 0.5), role: 'support', share: 1, use: '' },
+      ];
+      S.colors = S.colors.concat(add.slice(0, n - S.colors.length)); stash = [];
+    }
+  }
+  function setRole(i, role) {
+    if (UNIQUE.includes(role)) {
+      const other = S.colors.find((c, j) => j !== i && c.role === role);
+      if (other) other.role = S.colors[i].role;
+    }
+    S.colors[i].role = role;
+  }
+
+  /* render: panel */
+  let tab = 'colours', fontRole = 'display';
+  function panel() {
+    const n = S.colors.length;
+    const sum = S.colors.reduce((a, c) => a + (+c.share || 0), 0);
+    const colours = `<div class="section"><span class="label">Palette size</span>
+      <div class="seg" role="group" aria-label="Palette size">${[6, 8].map(k => `<button type="button" data-count="${k}" aria-pressed="${n === k}">${k} colours</button>`).join('')}</div></div>
+      <div class="section"><span class="label">Colours: pick, name, give each one a role and a share of the page</span>
+      ${S.colors.map((c, i) => `<div class="row">
+        <input type="color" value="${c.hex}" data-i="${i}" data-k="hex" aria-label="${esc(c.name)} colour">
+        <div class="names"><input type="text" value="${esc(c.name)}" data-i="${i}" data-k="name" aria-label="Colour name"><input type="text" value="${c.hex.toUpperCase()}" data-i="${i}" data-k="hexText" aria-label="${esc(c.name)} hex value" spellcheck="false"></div>
+        <select data-i="${i}" data-k="role" aria-label="${esc(c.name)} role">${Object.keys(ROLES).map(r => `<option value="${r}"${c.role === r ? ' selected' : ''}>${ROLES[r]}</option>`).join('')}</select>
+        <input type="number" min="0" max="100" value="${c.share || 0}" data-i="${i}" data-k="share" aria-label="${esc(c.name)} share of the page, percent">
+      </div>`).join('')}
+      <p class="sum${sum === 100 ? '' : ' bad'}">Shares add up to ${sum}%${sum === 100 ? '' : ', they should add up to 100%'}.</p></div>`;
+    const pairs = (S.explore && S.explore.pairings) || [];
+    const fonts = `${pairs.length ? `<div class="section"><span class="label">Suggested pairings</span><div class="chips">${pairs.map((p, i) => `<button type="button" class="chip" data-pair="${i}"><span style="font-family:'${esc(p.display)}';font-size:18px">${esc(p.display)}</span> + <span style="font-family:'${esc(p.text)}'">${esc(p.text)}</span>${p.why ? `<small>${esc(p.why)}</small>` : ''}</button>`).join('')}</div></div>` : ''}
+      <div class="section"><span class="label">Choose a font for</span>
+      <div class="seg" role="group" aria-label="Font role">${[['display', 'Headlines'], ['text', 'Text'], ['mono', 'Mono']].map(([r, l]) => `<button type="button" data-role="${r}" aria-pressed="${fontRole === r}">${l}</button>`).join('')}</div></div>
+      <div class="section"><span class="label">Headline style</span>
+      <div class="seg" role="group" aria-label="Headline case">${[['none', 'Sentence case'], ['upper', 'Capitals']].map(([v, l]) => `<button type="button" data-case="${v}" aria-pressed="${(S.type.headlineCase || 'none') === v}">${l}</button>`).join('')}</div>
+      <div class="seg" role="group" aria-label="Headline weight" style="margin-left:6px">${[['regular', 'Regular'], ['strong', 'Bold']].map(([v, l]) => `<button type="button" data-hw="${v}" aria-pressed="${(v === 'strong') === (S.fonts.display.weight === Math.max(...S.fonts.display.weights) && S.fonts.display.weights.length > 1)}">${l}</button>`).join('')}</div></div>
+      ${['Serif', 'Sans', 'Display', 'Mono'].map(cat => `<p class="cat">${cat}</p><div class="fontgrid">${FONTS.filter(f => f.cat === cat).map(f => `<button type="button" class="fcard" data-font="${esc(f.family)}" aria-pressed="${(S.fonts[fontRole] || {}).family === f.family}"><span class="fn" style="font-family:'${esc(f.family)}',${FALLBACK[cat]}">${esc(f.family)}</span><small>${f.weights.length > 1 ? f.weights.length + ' weights' : 'One weight'}</small></button>`).join('')}</div>`).join('')}
+      <div class="section"><label class="label" for="custom">Another Google Font, by exact name</label><input id="custom" class="field" placeholder="e.g. Literata" spellcheck="false"></div>`;
+    return `<aside class="panel"><div class="panel-head"><h1>${esc(S.name)}, explorer</h1><p>Tune the palette and the fonts. The preview updates as you go. When it feels right, send your choices back.</p></div>
+      <div class="tabs" role="tablist">${[['colours', 'Colours'], ['fonts', 'Fonts']].map(([k, l]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${tab === k}">${l}</button>`).join('')}</div>
+      <div class="scroll">${tab === 'colours' ? colours : fonts}</div>
+      <div class="export"><button type="button" class="primary" data-act="copy">Copy my choices</button><button type="button" class="ghost" data-act="download">Download brand.json</button><p class="status" role="status" id="status">Paste the copied text back into the conversation, or say where the file was saved.</p></div></aside>`;
+  }
+
+  /* render: preview */
+  function preview() {
+    const C = { dark: byRole('dark'), light: byRole('light'), primary: byRole('primary'), accent: byRole('accent'), secondary: byRole('secondary') || byRole('primary') };
+    const on = bg => ratio(bg, C.dark.hex) >= ratio(bg, C.light.hex) ? C.dark.hex : C.light.hex;
+    const F = S.fonts, st = f => f ? `"${f.family}", ${f.fallback || 'sans-serif'}` : null;
+    [F.display, F.text, F.mono].forEach(f => f && loadFont(f.family, f.weights));
+    const r = document.documentElement.style, set = (k, v) => r.setProperty(k, v);
+    set('--dark', C.dark.hex); set('--light', C.light.hex); set('--accent', C.accent.hex); set('--on-accent', on(C.accent.hex));
+    set('--secondary', C.secondary.hex); set('--on-secondary', on(C.secondary.hex));
+    set('--f-display', st(F.display)); set('--f-text', st(F.text)); set('--f-mono', st(F.mono || F.text));
+    set('--w-display', F.display.weight || F.display.weights[0]); set('--w-display-strong', Math.max(...F.display.weights));
+    set('--case', S.type.headlineCase === 'upper' ? 'uppercase' : 'none');
+    set('--track', (S.type.headlineCase === 'upper' ? 0.04 : (S.type.headlineTracking ?? -0.015)) + 'em');
+    set('--radius', ((S.layout || {}).radius ?? 2) + 'px');
+    const n = S.colors.length, E = S.essence || {};
+    const checks = [
+      ['Body text, ' + C.dark.name + ' on ' + C.light.name, ratio(C.dark.hex, C.light.hex), 7, 'aim for 7'],
+      ['Text on ' + C.primary.name, ratio(on(C.primary.hex), C.primary.hex), 4.5, 'needs 4.5'],
+      ['Button label on ' + C.accent.name, ratio(on(C.accent.hex), C.accent.hex), 4.5, 'needs 4.5'],
+      [C.accent.name + ' button on ' + C.light.name, ratio(C.accent.hex, C.light.hex), 3, 'needs 3'],
+      [C.primary.name + ' headline on ' + C.light.name, ratio(C.primary.hex, C.light.hex), 3, 'needs 3'],
+      ['Text on ' + C.secondary.name, ratio(on(C.secondary.hex), C.secondary.hex), 4.5, 'needs 4.5'],
+    ];
+    const tot = S.colors.reduce((a, c) => a + (+c.share || 0), 0) || 1;
+    return `<main class="preview" style="--n:${n}" aria-label="Live preview">
+      <figure><div class="card pad cover" style="background:${C.primary.hex};color:${on(C.primary.hex)}">
+        <div>${logo(on(C.primary.hex), 56)}</div><p class="h-display">Brand guidelines</p></div><figcaption class="caption">Cover, on ${esc(C.primary.name)}</figcaption></figure>
+      <figure><div class="card pad"><div class="two"><p class="h-display">${esc(S.tagline || S.name)}</p>
+        <div><p class="h-title" style="margin-bottom:12px">${esc((E.personality || []).map(p => p.word || p).join(', ') || 'A title for a section')}</p>
+        <p class="t-body">${esc(E.purpose || 'Body text sits here, set at sixteen pixels with generous leading, so a paragraph reads comfortably from the first line to the last.')}</p>
+        <p class="t-meta mono" style="margin-top:12px">${esc(F.display.family)} / ${esc(F.text.family)}${F.mono ? ' / ' + esc(F.mono.family) : ''}</p></div></div></div>
+        <figcaption class="caption">Headline, title, body and mono on ${esc(C.light.name)}</figcaption></figure>
+      <figure><div class="card"><div class="site-nav">${logo(C.primary.hex, 22)}<nav class="t-meta">${(S.navLinks || ['Shop', 'About', 'Journal']).map(esc).join('<span></span>')}<span class="btn">${esc(S.cta || 'Get in touch')}</span></nav></div>
+        <div class="site-hero"><div><p class="h-display" style="font-size:clamp(30px,3.6vw,52px)">${esc(S.tagline || S.name)}</p><p class="t-body" style="margin:16px 0 20px">${esc(E.purpose || '')}</p><span class="btn">${esc(S.cta || 'Get in touch')}</span></div>
+        <div class="panel-sec"><p class="h-title">${esc(S.social || 'Something new, this week.')}</p><p class="t-meta">A panel in ${esc(C.secondary.name)}</p></div></div></div>
+        <figcaption class="caption">Website, first screen</figcaption></figure>
+      <figure><div class="card"><div class="swatches">${S.colors.map(c => `<div class="sw" style="background:${c.hex};color:${on(c.hex)}"><b>${esc(c.name)}</b><span class="t-meta mono">${c.hex.toUpperCase()}<br>${ROLES[c.role]}</span></div>`).join('')}</div>
+        <div class="bar">${S.colors.map(c => `<span style="flex:${(+c.share || 0) / tot};background:${c.hex}"></span>`).join('')}</div></div>
+        <figcaption class="caption">Palette, and below it the share of the page each colour takes</figcaption></figure>
+      <figure><div class="card"><div class="logos">${S.colors.map(c => { const fg = [C.primary.hex, C.dark.hex, C.light.hex].sort((a, b) => ratio(c.hex, b) - ratio(c.hex, a))[0]; return `<div style="background:${c.hex}">${logo(fg, 20)}</div>`; }).join('')}</div></div>
+        <figcaption class="caption">The logo on every colour, in whichever of ${esc(C.primary.name)}, ${esc(C.dark.name)} or ${esc(C.light.name)} reads best</figcaption></figure>
+      <figure><div class="card pad"><ul class="checks">${checks.map(([label, v, min, need]) => `<li class="t-meta"><span>${esc(label)}</span><span class="${v >= min ? 'ok' : 'warn'}">${v.toFixed(1)}${v >= min ? '' : ', ' + need}</span></li>`).join('')}</ul></div>
+        <figcaption class="caption">Contrast checks (WCAG 2.2). Anything in red needs a darker or lighter colour before the book is built.</figcaption></figure>
+    </main>`;
+  }
+
+  function render(keepScroll) {
+    const sc = document.querySelector('.scroll'), top = sc ? sc.scrollTop : 0;
+    app.innerHTML = `<div class="app">${panel()}${preview()}</div>`;
+    if (keepScroll) document.querySelector('.scroll').scrollTop = top;
+  }
+  // font gallery: load only the letters of each family's own name
+  FONTS.forEach(f => loadFont(f.family, null, f.family));
+  render();
+
+  /* events */
+  app.addEventListener('input', e => {
+    const t = e.target, i = +t.dataset.i, k = t.dataset.k;
+    if (!k) return;
+    const c = S.colors[i];
+    if (k === 'hex') { c.hex = t.value.toUpperCase(); refresh(t); return; }
+    if (k === 'hexText') { if (/^#?[0-9a-f]{6}$/i.test(t.value.trim())) { c.hex = ('#' + t.value.trim().replace('#', '')).toUpperCase(); refresh(t); } return; }
+    if (k === 'name') { c.name = t.value; refresh(t); return; }
+    if (k === 'share') { c.share = Math.max(0, Math.min(100, +t.value || 0)); refresh(t); }
+  });
+  // Re-render the preview only, so the field being typed in keeps its focus.
+  function refresh(field) {
+    const pv = document.querySelector('.preview'); pv.outerHTML = preview();
+    const sum = S.colors.reduce((a, c) => a + (+c.share || 0), 0);
+    const s = document.querySelector('.sum'); if (s) { s.textContent = `Shares add up to ${sum}%${sum === 100 ? '' : ', they should add up to 100%'}.`; s.classList.toggle('bad', sum !== 100); }
+    if (field.dataset.k === 'hex') { const tx = field.closest('.row').querySelector('[data-k=hexText]'); tx.value = S.colors[+field.dataset.i].hex; }
+    if (field.dataset.k === 'hexText') { field.closest('.row').querySelector('[type=color]').value = S.colors[+field.dataset.i].hex; }
+  }
+  app.addEventListener('change', e => {
+    const t = e.target;
+    if (t.dataset.k === 'role') { setRole(+t.dataset.i, t.value); render(true); }
+    if (t.id === 'custom' && t.value.trim()) { S.fonts[fontRole] = { family: t.value.trim(), weights: [400], fallback: fontRole === 'mono' ? FALLBACK.Mono : FALLBACK.Sans }; if (fontRole === 'display') S.fonts.display.weight = 400; render(true); }
+  });
+  app.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const d = b.dataset;
+    if (d.tab) { tab = d.tab; render(); }
+    else if (d.count) { setCount(+d.count); render(true); }
+    else if (d.role) { fontRole = d.role; render(true); }
+    else if (d.font) { setFont(fontRole, d.font); render(true); }
+    else if (d.pair) { const p = S.explore.pairings[+d.pair]; setFont('display', p.display); setFont('text', p.text); if (p.mono) setFont('mono', p.mono); render(true); }
+    else if (d.case) { S.type.headlineCase = d.case; render(true); }
+    else if (d.hw) { const w = S.fonts.display.weights; S.fonts.display.weight = d.hw === 'strong' ? Math.max(...w) : w[0]; render(true); }
+    else if (d.act) exportChoices(d.act);
+  });
+
+  function payload() {
+    const out = JSON.parse(JSON.stringify(S));
+    if (out.logo) { delete out.logo.src; delete out.logo.ratio; }
+    return JSON.stringify(out, null, 2);
+  }
+  async function exportChoices(kind) {
+    const status = document.getElementById('status');
+    if (kind === 'download') {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([payload()], { type: 'application/json' }));
+      a.download = 'brand.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      status.textContent = 'Saved as brand.json in your downloads. Tell the conversation where it is.';
+      return;
+    }
+    const text = 'Here are my explorer choices:\n\n```json\n' + payload() + '\n```';
+    try { await navigator.clipboard.writeText(text); status.textContent = 'Copied. Paste it back into the conversation.'; }
+    catch (err) {
+      const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand('copy'); ta.remove();
+      status.textContent = ok ? 'Copied. Paste it back into the conversation.' : 'Copy was blocked by the browser. Use Download instead.';
+    }
+  }
+})();
+</script>
+</body>
+</html>
