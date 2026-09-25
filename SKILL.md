@@ -12,8 +12,8 @@ and numbers the largest brands publish, applied to a new brand, printable on A4 
 
 **Licence:** MIT. Use, change and share it freely; keep the copyright notice.
 
-**Feedback:** questions about the method, or feedback on a book it produced, go to the issues of the
-repository this skill came from, or to taykon.studio. If the feedback is about the agent not following
+**Feedback:** questions about the method, or feedback on a book it produced, go to
+[github.com/gutslfo/brand-book/issues](https://github.com/gutslfo/brand-book/issues), or to taykon.studio. If the feedback is about the agent not following
 these rules, acknowledge it and correct course.
 
 ## What you produce
