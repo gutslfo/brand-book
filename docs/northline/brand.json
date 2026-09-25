@@ -1,0 +1,151 @@
+{
+  "name": "Northline",
+  "tagline": "Freight without the fog",
+  "version": "1.0",
+  "date": "September 2026",
+  "intake": {
+    "feeling": "bold, direct, reliable, fast",
+    "lightness": "colour-led",
+    "colour": "a safety orange, no corporate blue as the main colour",
+    "typeVoice": "modern, without serifs",
+    "admire": "Braun, Swiss railway signage, Teenage Engineering",
+    "avoid": "every logistics company in navy and grey"
+  },
+  "essence": {
+    "purpose": "We make moving goods across borders as clear as sending an email.",
+    "personality": [
+      { "word": "Direct", "line": "The answer first. The details after, for whoever wants them." },
+      { "word": "Reliable", "line": "A promise is a time and a place, and we keep both." },
+      { "word": "Quick", "line": "Short words, short forms, short waits." }
+    ],
+    "voice": [
+      { "is": "Direct", "not": "Curt" },
+      { "is": "Confident", "not": "Loud" },
+      { "is": "Technical", "not": "Full of jargon" },
+      { "is": "Calm", "not": "Cold" }
+    ],
+    "write": "Your container clears customs at 14:20. Nothing needed from you.",
+    "avoid": "We leverage end-to-end synergies to deliver world-class logistics solutions.",
+    "letter": "Your first shipment is booked. Pickup is on Monday between 8:00 and 10:00, and you will get a message when the truck is ten minutes away."
+  },
+  "logo": {
+    "clearSpace": 0.5,
+    "unitLabel": "the height of the N",
+    "minWidthPx": 96,
+    "minWidthMm": 22,
+    "backgrounds": ["Paper", "Night", "Signal", "Fog"]
+  },
+  "colors": [
+    { "name": "Paper", "hex": "#F5F5F2", "role": "light", "share": 42, "use": "Pages, forms, the app" },
+    { "name": "Night", "hex": "#0E0F12", "role": "dark", "share": 24, "use": "Text, trucks, night mode" },
+    { "name": "Signal", "hex": "#C83C14", "role": "primary", "share": 16, "use": "The name, covers, the side of every truck" },
+    { "name": "Fog", "hex": "#E4E6EA", "role": "secondary", "share": 8, "use": "Tables, panels, the tracking map" },
+    { "name": "Cobalt", "hex": "#1D4ED8", "role": "accent", "share": 5, "use": "Links and the one button that matters" },
+    { "name": "Slate", "hex": "#5B6270", "role": "support", "share": 3, "use": "Secondary text" },
+    { "name": "Steel", "hex": "#9AA1AC", "role": "support", "share": 1, "use": "Dividers, disabled states" },
+    { "name": "Amber", "hex": "#F2B632", "role": "support", "share": 1, "use": "Delays and warnings, never decoration" }
+  ],
+  "fonts": {
+    "display": { "family": "Archivo", "weights": [400, 800], "weight": 800, "fallback": "system-ui, sans-serif", "role": "Headlines and the name, always in capitals" },
+    "text": { "family": "Instrument Sans", "weights": [400, 600], "fallback": "system-ui, sans-serif", "role": "Everything people read" },
+    "mono": { "family": "JetBrains Mono", "weights": [400], "fallback": "ui-monospace, monospace", "role": "Tracking numbers, times, weights" }
+  },
+  "type": {
+    "headlineCase": "upper",
+    "headlineTracking": 0.02,
+    "scale": [
+      { "level": "Display", "font": "display", "size": 72, "leading": 1, "tracking": 0.01, "weight": 800 },
+      { "level": "Headline", "font": "display", "size": 40, "leading": 1.05, "tracking": 0.02, "weight": 800 },
+      { "level": "Title", "font": "display", "size": 24, "leading": 1.2, "tracking": 0.03, "weight": 800 },
+      { "level": "Body", "font": "text", "size": 16, "leading": 1.5, "tracking": 0 },
+      { "level": "Caption", "font": "mono", "size": 13, "leading": 1.4, "tracking": 0 }
+    ],
+    "samples": {
+      "Display": "On time",
+      "Headline": "Cleared at 14:20",
+      "Title": "Direct, reliable, quick",
+      "Body": "Your container left Rotterdam this morning and reaches Basel on Thursday before noon.",
+      "Caption": "NL-2291-7730  18.4 t  ETA 11:40"
+    },
+    "rules": [
+      "Headlines in Archivo Extra Bold, always in capitals",
+      "Numbers people track (times, weights, references) in JetBrains Mono",
+      "Body text never below 16 px on screen",
+      "No italics, no underlines except links"
+    ]
+  },
+  "layout": {
+    "radius": 0,
+    "rules": [
+      "Square corners everywhere, like a shipping container",
+      "Big type, few words, one number that matters per screen"
+    ]
+  },
+  "imagery": {
+    "direction": "Trucks, ports and people at work in real light. Wide shots with a clear horizon; the orange appears on the vehicles, not as a filter.",
+    "do": ["Wide shots with a clear horizon", "Real drivers and warehouse teams", "The truck's side as a sign"],
+    "dont": ["Globes, handshakes, blue light trails", "Stock photography", "Motion blur used as decoration"]
+  },
+  "contact": {
+    "person": "Mira Jensen",
+    "role": "Operations lead",
+    "email": "mira@northline.example",
+    "phone": "+44 20 7946 0911",
+    "web": "northline.example",
+    "address": "Dock 7, Harwich",
+    "brandContact": "brand@northline.example"
+  },
+  "cta": "Get a quote",
+  "navLinks": ["Track", "Ship", "Pricing"],
+  "social": "Rotterdam to Basel in 41 hours. Every week.",
+  "slideTitle": "Quarterly review, Q1 2027",
+  "never": [
+    "Use navy as the main colour",
+    "Put Amber anywhere but a delay or a warning",
+    "Round a corner",
+    "Set a headline in lower case",
+    "Show a globe, a handshake or a light trail",
+    "Promise a time we cannot track"
+  ],
+  "explore": {
+    "palettes": [
+      { "name": "Signal", "why": "Safety orange leads, cobalt only for action. Nobody else in freight looks like this.", "colors": [
+        { "name": "Paper", "hex": "#F5F5F2", "role": "light", "share": 42 },
+        { "name": "Night", "hex": "#0E0F12", "role": "dark", "share": 24 },
+        { "name": "Signal", "hex": "#C83C14", "role": "primary", "share": 16 },
+        { "name": "Fog", "hex": "#E4E6EA", "role": "secondary", "share": 8 },
+        { "name": "Cobalt", "hex": "#1D4ED8", "role": "accent", "share": 5 },
+        { "name": "Slate", "hex": "#5B6270", "role": "support", "share": 3 },
+        { "name": "Steel", "hex": "#9AA1AC", "role": "support", "share": 1 },
+        { "name": "Amber", "hex": "#F2B632", "role": "support", "share": 1 } ] },
+      { "name": "Hi-vis", "why": "Black and a yellow borrowed from the work vest. Louder, more industrial.", "colors": [
+        { "name": "White", "hex": "#FFFFFF", "role": "light", "share": 40 },
+        { "name": "Coal", "hex": "#111111", "role": "dark", "share": 30 },
+        { "name": "Graphite", "hex": "#2B2E33", "role": "primary", "share": 14 },
+        { "name": "Vest", "hex": "#F3D02F", "role": "secondary", "share": 8 },
+        { "name": "Route", "hex": "#0F6B4F", "role": "accent", "share": 4 },
+        { "name": "Concrete", "hex": "#6B6F76", "role": "support", "share": 2 },
+        { "name": "Dust", "hex": "#D9DBDE", "role": "support", "share": 1 },
+        { "name": "Brake", "hex": "#B3261E", "role": "support", "share": 1 } ] },
+      { "name": "Container", "why": "The colours of a port at dusk: rust, steel and a sea green.", "colors": [
+        { "name": "Bone", "hex": "#F2EFE9", "role": "light", "share": 42 },
+        { "name": "Hull", "hex": "#13171C", "role": "dark", "share": 22 },
+        { "name": "Rust", "hex": "#8E3B1F", "role": "primary", "share": 16 },
+        { "name": "Haze", "hex": "#D8DDDF", "role": "secondary", "share": 9 },
+        { "name": "Buoy", "hex": "#0D6E6E", "role": "accent", "share": 5 },
+        { "name": "Iron", "hex": "#4D545C", "role": "support", "share": 3 },
+        { "name": "Chalk", "hex": "#B6BCC2", "role": "support", "share": 2 },
+        { "name": "Lamp", "hex": "#E0A526", "role": "support", "share": 1 } ] }
+    ],
+    "pairings": [
+      { "display": "Archivo", "text": "Instrument Sans", "mono": "JetBrains Mono", "why": "Extra bold capitals, like the side of a truck." },
+      { "display": "Big Shoulders", "text": "Public Sans", "mono": "Space Mono", "why": "Condensed and industrial, closer to port signage." },
+      { "display": "Chivo", "text": "Work Sans", "mono": "JetBrains Mono", "why": "Quieter and more corporate, for a sober brand." }
+    ],
+    "shortlist": {
+      "display": ["Archivo", "Big Shoulders", "Chivo", "Barlow Condensed", "Schibsted Grotesk", "Unbounded"],
+      "text": ["Instrument Sans", "Public Sans", "Work Sans", "Hanken Grotesk", "Karla", "Figtree"],
+      "mono": ["JetBrains Mono", "Space Mono", "DM Mono"]
+    }
+  }
+}

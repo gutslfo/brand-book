@@ -1,0 +1,500 @@
+{
+  "name": "Maren",
+  "tagline": "Stoneware from the coast",
+  "version": "1.0",
+  "date": "September 2026",
+  "essence": {
+    "purpose": "We make everyday stoneware that slows the table down.",
+    "personality": [
+      {
+        "word": "Calm",
+        "line": "Nothing shouts. Space does the work."
+      },
+      {
+        "word": "Tactile",
+        "line": "Every surface should make you want to touch it."
+      },
+      {
+        "word": "Precise",
+        "line": "Made by hand, never approximate."
+      }
+    ],
+    "voice": [
+      {
+        "is": "Calm",
+        "not": "Sleepy"
+      },
+      {
+        "is": "Precise",
+        "not": "Clinical"
+      },
+      {
+        "is": "Warm",
+        "not": "Sentimental"
+      },
+      {
+        "is": "Plain",
+        "not": "Blunt"
+      }
+    ],
+    "write": "Thrown by hand in small batches, glazed in the colours of the harbour.",
+    "avoid": "Discover our amazing handcrafted collection, made with passion!",
+    "letter": "Thank you for your order. Each piece was thrown, trimmed and glazed in our studio, so no two are quite the same. Please allow the glaze a week before the first wash."
+  },
+  "logo": {
+    "file": "logo.svg",
+    "color": "Sea",
+    "clearSpace": 0.5,
+    "unitLabel": "half the height of the logo",
+    "minWidthPx": 96,
+    "minWidthMm": 24,
+    "smallUse": "Below that, use the ring symbol on its own.",
+    "backgrounds": [
+      "Paper",
+      "Sand",
+      "Foam",
+      "Ink",
+      "Sea"
+    ],
+    "misuse": [
+      "stretch",
+      "rotate",
+      "recolor",
+      "effects",
+      "busy",
+      "contrast",
+      "crowd",
+      "small"
+    ]
+  },
+  "colors": [
+    {
+      "name": "Paper",
+      "hex": "#F5F0E8",
+      "role": "light",
+      "share": 44,
+      "use": "Pages and backgrounds"
+    },
+    {
+      "name": "Ink",
+      "hex": "#14202B",
+      "role": "dark",
+      "share": 20,
+      "use": "Text and dark surfaces"
+    },
+    {
+      "name": "Sea",
+      "hex": "#1F4E63",
+      "role": "primary",
+      "share": 18,
+      "use": "The logo, headlines, brand surfaces"
+    },
+    {
+      "name": "Sand",
+      "hex": "#E2D2B8",
+      "role": "secondary",
+      "share": 7,
+      "use": "Quiet panels and image grounds"
+    },
+    {
+      "name": "Clay",
+      "hex": "#AD4F2B",
+      "role": "accent",
+      "share": 5,
+      "use": "One call to action per page"
+    },
+    {
+      "name": "Foam",
+      "hex": "#BCD2D4",
+      "role": "support",
+      "share": 3,
+      "use": "Charts and tags"
+    },
+    {
+      "name": "Stone",
+      "hex": "#7D776C",
+      "role": "support",
+      "share": 2,
+      "use": "Secondary text on Paper"
+    },
+    {
+      "name": "Kelp",
+      "hex": "#4E5A3B",
+      "role": "support",
+      "share": 1,
+      "use": "Seasonal collections only"
+    }
+  ],
+  "fonts": {
+    "display": {
+      "family": "Newsreader",
+      "weights": [
+        400,
+        500
+      ],
+      "weight": 400,
+      "fallback": "Georgia, serif",
+      "role": "Headlines, the purpose line, specimens"
+    },
+    "text": {
+      "family": "Hanken Grotesk",
+      "weights": [
+        400,
+        600
+      ],
+      "fallback": "system-ui, sans-serif",
+      "role": "Body, interface, captions"
+    },
+    "mono": {
+      "family": "DM Mono",
+      "weights": [
+        400
+      ],
+      "fallback": "ui-monospace, monospace",
+      "role": "Prices, dimensions, codes"
+    }
+  },
+  "type": {
+    "headlineCase": "none",
+    "headlineTracking": -0.01,
+    "scale": [
+      {
+        "level": "Display",
+        "font": "display",
+        "size": 72,
+        "leading": 1.05,
+        "tracking": -0.02
+      },
+      {
+        "level": "Headline",
+        "font": "display",
+        "size": 44,
+        "leading": 1.1,
+        "tracking": -0.01
+      },
+      {
+        "level": "Title",
+        "font": "display",
+        "size": 28,
+        "leading": 1.2,
+        "tracking": 0
+      },
+      {
+        "level": "Body",
+        "font": "text",
+        "size": 16,
+        "leading": 1.5,
+        "tracking": 0
+      },
+      {
+        "level": "Caption",
+        "font": "text",
+        "size": 13,
+        "leading": 1.4,
+        "tracking": 0.01
+      }
+    ],
+    "samples": {
+      "Display": "Slow the table",
+      "Headline": "Made by hand on the coast",
+      "Title": "Calm, tactile, precise",
+      "Body": "Each bowl is thrown, trimmed and glazed in our studio, in batches of twelve.",
+      "Caption": "Harbour bowl, sea glaze, 14 cm"
+    },
+    "rules": [
+      "Headlines in Newsreader, sentence case, never in capitals",
+      "Body in Hanken Grotesk, 16 px minimum on screen",
+      "Lines between 45 and 75 characters",
+      "No italics: emphasis comes from weight or colour"
+    ]
+  },
+  "layout": {
+    "columns": 12,
+    "gutter": 2,
+    "unit": 8,
+    "radius": 2,
+    "rules": [
+      "One idea per page. White space is part of the product.",
+      "Images bleed off the edge or sit on the grid, they never float."
+    ]
+  },
+  "imagery": {
+    "direction": "Natural daylight, close enough to see the glaze. Objects in use, on real tables, never on seamless white.",
+    "do": [
+      "Morning light from one side",
+      "Hands, food and table in the frame",
+      "Texture sharp, background soft"
+    ],
+    "dont": [
+      "Studio packshots on pure white",
+      "Filters, grain or heavy colour grading",
+      "Stock photography of any kind"
+    ]
+  },
+  "contact": {
+    "person": "Léa Moreau",
+    "role": "Founder and potter",
+    "email": "hello@maren.example",
+    "phone": "+44 20 7946 0321",
+    "web": "maren.example",
+    "address": "Studio 4, Ropewalk Yard, London",
+    "brandContact": "brand@maren.example"
+  },
+  "explore": {
+    "palettes": [
+      {
+        "name": "Harbour",
+        "why": "Sea blue leads, clay is saved for the one thing to click.",
+        "colors": [
+          {
+            "name": "Paper",
+            "hex": "#F5F0E8",
+            "role": "light",
+            "share": 44,
+            "use": "Pages and backgrounds"
+          },
+          {
+            "name": "Ink",
+            "hex": "#14202B",
+            "role": "dark",
+            "share": 20,
+            "use": "Text and dark surfaces"
+          },
+          {
+            "name": "Sea",
+            "hex": "#1F4E63",
+            "role": "primary",
+            "share": 18,
+            "use": "The logo, headlines, brand surfaces"
+          },
+          {
+            "name": "Sand",
+            "hex": "#E2D2B8",
+            "role": "secondary",
+            "share": 7,
+            "use": "Quiet panels and image grounds"
+          },
+          {
+            "name": "Clay",
+            "hex": "#AD4F2B",
+            "role": "accent",
+            "share": 5,
+            "use": "One call to action per page"
+          },
+          {
+            "name": "Foam",
+            "hex": "#BCD2D4",
+            "role": "support",
+            "share": 3,
+            "use": "Charts and tags"
+          },
+          {
+            "name": "Stone",
+            "hex": "#7D776C",
+            "role": "support",
+            "share": 2,
+            "use": "Secondary text on Paper"
+          },
+          {
+            "name": "Kelp",
+            "hex": "#4E5A3B",
+            "role": "support",
+            "share": 1,
+            "use": "Seasonal collections only"
+          }
+        ]
+      },
+      {
+        "name": "Tide",
+        "why": "Deeper and cooler: navy pages for evenings, foam for air.",
+        "colors": [
+          {
+            "name": "Foam",
+            "hex": "#EEF2F1",
+            "role": "light",
+            "share": 40,
+            "use": "Pages and backgrounds"
+          },
+          {
+            "name": "Deep",
+            "hex": "#0F1B2B",
+            "role": "dark",
+            "share": 26,
+            "use": "Text and night surfaces"
+          },
+          {
+            "name": "Navy",
+            "hex": "#1C3553",
+            "role": "primary",
+            "share": 18,
+            "use": "The logo, headlines, brand surfaces"
+          },
+          {
+            "name": "Mist",
+            "hex": "#CFDCDD",
+            "role": "secondary",
+            "share": 7,
+            "use": "Quiet panels"
+          },
+          {
+            "name": "Coral",
+            "hex": "#B2462F",
+            "role": "accent",
+            "share": 4,
+            "use": "One call to action per page"
+          },
+          {
+            "name": "Kelp",
+            "hex": "#3F5A4C",
+            "role": "support",
+            "share": 2,
+            "use": "Seasonal collections"
+          },
+          {
+            "name": "Slate",
+            "hex": "#6B7580",
+            "role": "support",
+            "share": 2,
+            "use": "Secondary text"
+          },
+          {
+            "name": "Sand",
+            "hex": "#E6D8BF",
+            "role": "support",
+            "share": 1,
+            "use": "Tags and labels"
+          }
+        ]
+      },
+      {
+        "name": "Kiln",
+        "why": "Warmer, closer to the studio: clay leads and the sea becomes the accent.",
+        "colors": [
+          {
+            "name": "Slip",
+            "hex": "#F7F1E8",
+            "role": "light",
+            "share": 44,
+            "use": "Pages and backgrounds"
+          },
+          {
+            "name": "Char",
+            "hex": "#221A16",
+            "role": "dark",
+            "share": 20,
+            "use": "Text and dark surfaces"
+          },
+          {
+            "name": "Terra",
+            "hex": "#8A4128",
+            "role": "primary",
+            "share": 18,
+            "use": "The logo, headlines, brand surfaces"
+          },
+          {
+            "name": "Bisque",
+            "hex": "#EAD9C0",
+            "role": "secondary",
+            "share": 8,
+            "use": "Quiet panels"
+          },
+          {
+            "name": "Sea",
+            "hex": "#1F4E63",
+            "role": "accent",
+            "share": 5,
+            "use": "One call to action per page"
+          },
+          {
+            "name": "Ash",
+            "hex": "#7A7168",
+            "role": "support",
+            "share": 3,
+            "use": "Secondary text"
+          },
+          {
+            "name": "Glaze",
+            "hex": "#B9CFC9",
+            "role": "support",
+            "share": 1,
+            "use": "Charts and tags"
+          },
+          {
+            "name": "Olive",
+            "hex": "#55593A",
+            "role": "support",
+            "share": 1,
+            "use": "Seasonal collections"
+          }
+        ]
+      }
+    ],
+    "pairings": [
+      {
+        "display": "Newsreader",
+        "text": "Hanken Grotesk",
+        "mono": "DM Mono",
+        "why": "Editorial and calm: a book serif over a quiet grotesque."
+      },
+      {
+        "display": "Fraunces",
+        "text": "Instrument Sans",
+        "why": "Softer and warmer, closer to the hand."
+      },
+      {
+        "display": "Schibsted Grotesk",
+        "text": "Inter",
+        "why": "All sans, sharper and more modern."
+      }
+    ],
+    "shortlist": {
+      "display": [
+        "Newsreader",
+        "Fraunces",
+        "Source Serif 4",
+        "Spectral",
+        "Gloock",
+        "Instrument Serif"
+      ],
+      "text": [
+        "Hanken Grotesk",
+        "Instrument Sans",
+        "Schibsted Grotesk",
+        "Public Sans",
+        "Work Sans",
+        "Karla"
+      ],
+      "mono": [
+        "DM Mono",
+        "JetBrains Mono",
+        "Space Mono"
+      ]
+    }
+  },
+  "cta": "Visit the shop",
+  "navLinks": [
+    "Shop",
+    "Studio",
+    "Journal"
+  ],
+  "social": "New glazes, fired this week.",
+  "slideTitle": "Spring collection, 2027",
+  "never": [
+    "Use the accent for more than one call to action per page",
+    "Set text in italics",
+    "Put the logo on a photograph without a calm, solid area",
+    "Use more than two weights on one page",
+    "Use stock photography",
+    "Add gradients or shadows to anything",
+    "Centre long passages of text",
+    "Write more than three words in capitals"
+  ],
+  "intake": {
+    "feeling": "calm, tactile, precise, coastal",
+    "lightness": "mostly light",
+    "colour": "deep sea blue with warm clay",
+    "typeVoice": "serif headlines with simple text",
+    "admire": "Aesop, Hay, Kinfolk",
+    "avoid": "anything that looks like a craft fair"
+  }
+}

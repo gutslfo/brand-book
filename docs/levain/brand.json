@@ -1,0 +1,141 @@
+{
+  "name": "Levain",
+  "tagline": "Bread the slow way",
+  "version": "1.0",
+  "date": "September 2026",
+  "intake": {
+    "feeling": "warm, honest, a bit old-fashioned",
+    "lightness": "mostly light",
+    "colour": "browns and a deep green",
+    "typeVoice": "classic, with serifs",
+    "admire": "Poilâne, Tartine, old enamel shop signs",
+    "avoid": "supermarket bakery aisles"
+  },
+  "essence": {
+    "purpose": "We bake bread that takes its time, for neighbours who notice.",
+    "personality": [
+      { "word": "Patient", "line": "Nothing rushed, from the dough to the counter." },
+      { "word": "Neighbourly", "line": "We know your name and your usual." },
+      { "word": "Honest", "line": "Flour, water, salt and time. Nothing else to hide." }
+    ],
+    "voice": [
+      { "is": "Warm", "not": "Twee" },
+      { "is": "Plain", "not": "Rustic cliché" },
+      { "is": "Proud", "not": "Precious" }
+    ],
+    "write": "The rye is ready at ten. It takes two days, so there are forty loaves.",
+    "avoid": "Indulge in our delicious artisanal breads, lovingly handcrafted daily!",
+    "letter": "Thank you for ordering the wedding loaves. We will start the levain on Thursday evening and bake on Saturday at five, so the bread reaches you still warm."
+  },
+  "logo": {
+    "clearSpace": 0.5,
+    "unitLabel": "the height of the capital L",
+    "minWidthPx": 80,
+    "minWidthMm": 20,
+    "backgrounds": ["Linen", "Straw", "Fir", "Bark"]
+  },
+  "colors": [
+    { "name": "Linen", "hex": "#F4EFE6", "role": "light", "share": 48, "use": "Pages, bags, the counter cards" },
+    { "name": "Bark", "hex": "#1F2A22", "role": "dark", "share": 20, "use": "Text and the shop sign" },
+    { "name": "Fir", "hex": "#24483A", "role": "primary", "share": 15, "use": "The name, headlines, the awning" },
+    { "name": "Straw", "hex": "#E6D5AE", "role": "secondary", "share": 7, "use": "Price cards and panels" },
+    { "name": "Tomato", "hex": "#A8452B", "role": "accent", "share": 5, "use": "One call to action, the daily special" },
+    { "name": "Pebble", "hex": "#6F6A60", "role": "support", "share": 5, "use": "Secondary text and small print" }
+  ],
+  "fonts": {
+    "display": { "family": "Young Serif", "weights": [400], "weight": 400, "fallback": "Georgia, serif", "role": "The name, headlines, price cards" },
+    "text": { "family": "Figtree", "weights": [400, 600], "fallback": "system-ui, sans-serif", "role": "Everything else" }
+  },
+  "type": {
+    "headlineCase": "none",
+    "headlineTracking": -0.01,
+    "scale": [
+      { "level": "Display", "font": "display", "size": 80, "leading": 1.02, "tracking": -0.02 },
+      { "level": "Headline", "font": "display", "size": 48, "leading": 1.08, "tracking": -0.01 },
+      { "level": "Title", "font": "display", "size": 30, "leading": 1.2, "tracking": 0 },
+      { "level": "Body", "font": "text", "size": 17, "leading": 1.55, "tracking": 0 },
+      { "level": "Caption", "font": "text", "size": 13, "leading": 1.4, "tracking": 0.01 }
+    ],
+    "samples": {
+      "Display": "Rye at ten",
+      "Headline": "Two days for one loaf",
+      "Title": "Patient, neighbourly, honest",
+      "Body": "Our levain is fed twice a day. The dough rests overnight in the cold, then bakes at dawn.",
+      "Caption": "Country loaf, 800 g, baked this morning"
+    },
+    "rules": [
+      "Young Serif for the name and headlines only, never for paragraphs",
+      "Prices in Figtree semibold",
+      "Sentence case everywhere, including the shop sign",
+      "No italics: emphasis comes from colour or size"
+    ]
+  },
+  "layout": {
+    "radius": 8,
+    "rules": [
+      "Generous margins, like a paper bag with one stamp on it",
+      "One photograph per page, never a collage"
+    ]
+  },
+  "imagery": {
+    "direction": "Early light in the bakery, flour in the air, hands at work. Bread shown whole, then cut.",
+    "do": ["Morning light through the shop window", "Crumb and crust in close-up", "The baker's hands"],
+    "dont": ["Baskets styled with gingham", "Stock photography", "Bread on a white seamless backdrop"]
+  },
+  "contact": {
+    "person": "Sam Okafor",
+    "role": "Head baker",
+    "email": "hello@levain.example",
+    "phone": "+44 20 7946 0588",
+    "web": "levain.example",
+    "address": "3 Mill Lane, London",
+    "brandContact": "brand@levain.example"
+  },
+  "cta": "Order for Saturday",
+  "navLinks": ["Bread", "Pastry", "Visit"],
+  "social": "The rye is back. Forty loaves, from ten.",
+  "slideTitle": "Wholesale, spring 2027",
+  "never": [
+    "Write the word artisanal",
+    "Use Tomato for anything but one action per page",
+    "Set text in italics",
+    "Put the name in capitals",
+    "Use more than one photograph per page",
+    "Borrow the look of a supermarket bakery aisle"
+  ],
+  "explore": {
+    "palettes": [
+      { "name": "Market", "why": "Green leads, like a market stall awning. Terracotta for the one thing to buy.", "colors": [
+        { "name": "Linen", "hex": "#F4EFE6", "role": "light", "share": 48, "use": "Pages, bags, the counter cards" },
+        { "name": "Bark", "hex": "#1F2A22", "role": "dark", "share": 20, "use": "Text and the shop sign" },
+        { "name": "Fir", "hex": "#24483A", "role": "primary", "share": 15, "use": "The name, headlines, the awning" },
+        { "name": "Straw", "hex": "#E6D5AE", "role": "secondary", "share": 7, "use": "Price cards and panels" },
+        { "name": "Tomato", "hex": "#A8452B", "role": "accent", "share": 5, "use": "One call to action, the daily special" },
+        { "name": "Pebble", "hex": "#6F6A60", "role": "support", "share": 5, "use": "Secondary text and small print" } ] },
+      { "name": "Crust", "why": "Warm browns from the oven, with a deep basil green for action.", "colors": [
+        { "name": "Flour", "hex": "#F6F1E7", "role": "light", "share": 45 },
+        { "name": "Rye", "hex": "#2B211B", "role": "dark", "share": 20 },
+        { "name": "Crust", "hex": "#7A4A2A", "role": "primary", "share": 15 },
+        { "name": "Wheat", "hex": "#E4CFA3", "role": "secondary", "share": 8 },
+        { "name": "Basil", "hex": "#2F5D3A", "role": "accent", "share": 5 },
+        { "name": "Ash", "hex": "#6E655C", "role": "support", "share": 7 } ] },
+      { "name": "Bakehouse", "why": "Charcoal and butter: quieter, more grown-up.", "colors": [
+        { "name": "Butter", "hex": "#FAF4E1", "role": "light", "share": 45 },
+        { "name": "Coal", "hex": "#1C1B19", "role": "dark", "share": 25 },
+        { "name": "Umber", "hex": "#5A3B2E", "role": "primary", "share": 14 },
+        { "name": "Sesame", "hex": "#E9DDC2", "role": "secondary", "share": 6 },
+        { "name": "Leaf", "hex": "#3E6B4A", "role": "accent", "share": 6 },
+        { "name": "Smoke", "hex": "#6A635A", "role": "support", "share": 4 } ] }
+    ],
+    "pairings": [
+      { "display": "Young Serif", "text": "Figtree", "why": "Warm and a little old-fashioned, like a painted shop sign." },
+      { "display": "Fraunces", "text": "Work Sans", "why": "Softer and more hand-made." },
+      { "display": "Libre Caslon Text", "text": "Public Sans", "why": "Classic and trusted, a village bakery rather than a chain." },
+      { "display": "Caprasimo", "text": "Karla", "why": "Rounder and friendlier, for a bakery with a café." }
+    ],
+    "shortlist": {
+      "display": ["Young Serif", "Fraunces", "Libre Caslon Text", "Caprasimo", "Gloock", "Spectral"],
+      "text": ["Figtree", "Work Sans", "Public Sans", "Karla", "Instrument Sans", "Hanken Grotesk"]
+    }
+  }
+}

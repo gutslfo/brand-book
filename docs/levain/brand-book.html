@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+/* Brand book template. Every value on the page comes from BRAND (brand.json).
+   One type scale (six sizes), one spacing scale, one twelve-column grid.
+   Sizes are in cqw so the page keeps its proportions from a laptop to A4 print. */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:#d4d1cb;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:var(--f-text);font-synthesis:none;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;padding:32px 0}
+#book{display:flex;flex-direction:column;align-items:center;gap:32px}
+.empty{font:16px/1.5 system-ui,sans-serif;padding:48px;max-width:40em;margin:auto}
+
+.page{
+  width:min(calc(100vw - 48px),1400px);aspect-ratio:297/210;position:relative;overflow:hidden;
+  container-type:inline-size;background:var(--bg);color:var(--fg);
+  box-shadow:0 1px 2px rgba(0,0,0,.08),0 12px 40px rgba(0,0,0,.08);
+}
+.sheet{
+  --t-meta:max(12px,1cqw);--t-body:max(14px,1.25cqw);--t-lede:max(18px,1.9cqw);
+  --t-title:max(26px,3.4cqw);--t-display:max(38px,6.6cqw);--t-hero:max(52px,12cqw);
+  --m:3.54cqw;            /* margin = 5% of the page's shortest side (eBay rule) */
+  --g:1.5cqw;--s1:.67cqw;--s2:1.33cqw;--s3:2.67cqw;--s4:5.33cqw;
+  --rule:color-mix(in srgb,var(--fg) 22%,transparent);
+  --tint:color-mix(in srgb,var(--fg) 5%,var(--bg));
+  position:absolute;inset:0;padding:var(--m);display:grid;grid-template-rows:auto 1fr auto;row-gap:var(--s3);
+}
+.run{display:flex;justify-content:space-between;gap:var(--s2);font-size:var(--t-meta);line-height:1.4}
+.body{min-height:0;position:relative}
+
+.t-hero,.t-display,.t-title{font-family:var(--f-display);font-weight:var(--w-display);letter-spacing:var(--track);text-transform:var(--case);text-wrap:balance}
+.t-hero{font-size:var(--t-hero);line-height:1}
+.t-display{font-size:var(--t-display);line-height:1.04}
+.t-title{font-size:var(--t-title);line-height:1.1}
+.t-lede{font-size:var(--t-lede);line-height:1.35;text-wrap:pretty}
+.t-body{font-size:var(--t-body);line-height:1.5;text-wrap:pretty;max-width:62ch}
+.t-meta{font-size:var(--t-meta);line-height:1.4}
+.mono{font-family:var(--f-mono)}
+b,strong{font-weight:var(--w-strong)}
+
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:minmax(0,1fr);column-gap:var(--g);row-gap:var(--s3);height:100%}
+.split{display:flex;flex-direction:column;justify-content:space-between;height:100%;gap:var(--s3)}
+.stack>*+*{margin-top:var(--s2)}
+.rule{border-top:1px solid var(--rule);padding-top:var(--s1)}
+.head{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--g);align-items:start}
+.head h2{grid-column:1/6}.head p{grid-column:7/13}
+.full{display:grid;grid-template-rows:auto 1fr;row-gap:var(--s3);height:100%}
+.aside{grid-column:1/5}.main{grid-column:5/13}
+.cap{font-size:var(--t-meta);line-height:1.4;margin-top:var(--s1)}
+figure{min-width:0}
+
+/* logo */
+.logo{display:inline-block;vertical-align:middle;flex:none;-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
+.logo-img{display:block;flex:none}
+.wordmark{display:inline-block;font-family:var(--f-display);font-weight:var(--w-display-strong);line-height:1;letter-spacing:var(--track);white-space:nowrap;flex:none}
+
+/* cover, divider, back */
+.cover-body,.divider-body{display:flex;flex-direction:column;justify-content:space-between;height:100%}
+.cover-foot{display:flex;justify-content:space-between;align-items:end;gap:var(--s3)}
+.cover-foot .t-meta{text-align:right}
+.divider-body .t-lede{max-width:30ch}
+.back-body{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:var(--s3);text-align:center}
+
+/* contents */
+.toc{list-style:none}
+.toc li{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--rule);padding:var(--s1) 0 var(--s2)}
+.toc li:last-child{border-bottom:1px solid var(--rule)}
+
+/* essence and voice */
+.traits{display:grid;grid-template-columns:repeat(var(--k),minmax(0,1fr));column-gap:var(--g)}
+.pairs{width:100%;border-collapse:collapse}
+.pairs th{font-size:var(--t-meta);font-weight:inherit;text-align:left;padding-bottom:var(--s1)}
+.pairs td{font-size:var(--t-lede);line-height:1.3;border-top:1px solid var(--rule);padding:var(--s1) var(--g) var(--s2) 0;width:50%}
+.samples{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--g)}
+.samples .t-lede{font-family:var(--f-display)}
+.strike{text-decoration:line-through;text-decoration-thickness:1px;opacity:.75}
+
+/* logo pages */
+.panels{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--g);height:100%;grid-template-rows:1fr auto}
+.panel{display:flex;align-items:center;justify-content:center;border:1px solid var(--rule)}
+.cs-wrap{display:flex;align-items:center;justify-content:center;height:100%;background:var(--tint)}
+.cs-box{position:relative;padding:var(--x);outline:1px dashed var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);line-height:0}
+.cs-box .logo,.cs-box .wordmark,.cs-box .logo-img{outline:1px solid color-mix(in srgb,var(--accent) 55%,transparent)}
+.xq{position:absolute;width:var(--x);height:var(--x);background:color-mix(in srgb,var(--accent) 22%,transparent);display:flex;align-items:center;justify-content:center;font:var(--t-meta)/1 var(--f-mono);color:var(--fg)}
+.minsize{display:flex;flex-direction:column;gap:var(--s3)}
+.tiles{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:var(--s2) var(--g);height:100%;grid-auto-rows:1fr}
+.tile{display:flex;flex-direction:column;min-height:0}
+.tile-face{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:0}
+.tile-face.bordered{border:1px solid var(--rule)}
+.crowd{display:flex;align-items:center;gap:.25cqw}
+
+/* colour pages */
+.chip{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:var(--s2);min-height:0}
+.bar{display:flex;height:100%;min-height:12cqw}
+.bar span{display:flex;align-items:flex-end;padding:var(--s1);overflow:hidden;white-space:nowrap}
+.legend{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s2) var(--g)}
+.dot{display:inline-block;width:.8em;height:.8em;margin-right:.4em;vertical-align:-.05em;box-shadow:inset 0 0 0 1px var(--rule)}
+.matrix{display:grid;grid-template-columns:auto repeat(var(--n),minmax(0,1fr));gap:2px;height:100%;grid-auto-rows:1fr}
+.matrix .mh{align-self:end;padding-bottom:var(--s1);overflow:hidden;text-overflow:clip;white-space:nowrap}
+.matrix .mr{align-self:center;padding-right:var(--s2);white-space:nowrap}
+.cell{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2cqw;min-height:0}
+.cell .aa{font-family:var(--f-display);font-weight:var(--w-display);font-size:var(--t-lede);line-height:1}
+
+/* type pages */
+.families{display:grid;grid-template-columns:repeat(var(--k),minmax(0,1fr));column-gap:var(--g);height:100%}
+.family{display:flex;flex-direction:column;gap:var(--s2);border-top:1px solid var(--rule);padding-top:var(--s1)}
+.family .aa{font-size:var(--t-hero);line-height:1}
+.levels{display:flex;flex-direction:column}
+.level{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);column-gap:var(--g);align-items:baseline;border-top:1px solid var(--rule);padding:var(--s1) 0 var(--s2)}
+.level .spec{overflow:hidden}
+.level .spec.one-line{white-space:nowrap}
+.bullets{list-style:none}
+.bullets li{border-top:1px solid var(--rule);padding:var(--s1) 0 var(--s2)}
+
+/* grid page */
+.mock{position:relative;aspect-ratio:297/210;width:100%;background:var(--light);color:var(--dark);border:1px solid var(--rule);container-type:inline-size;overflow:hidden}
+.mock-cols{position:absolute;inset:0 5%;display:grid;grid-template-columns:repeat(12,1fr);column-gap:2%}
+.mock-cols span{background:color-mix(in srgb,var(--accent) 16%,transparent)}
+.mock-in{position:absolute;inset:5%;display:grid;grid-template-columns:repeat(12,1fr);column-gap:2%;grid-template-rows:auto 1fr;row-gap:6%}
+.mock-img{background:var(--secondary);display:flex;align-items:flex-end;padding:3%;color:var(--on-secondary);font:max(12px,2.6cqw)/1.2 var(--f-text)}
+
+/* applications */
+.apps{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--g);height:100%;align-items:start}
+.card{aspect-ratio:85/55;position:relative;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.12),0 8px 24px rgba(0,0,0,.08)}
+.card-in{position:absolute;inset:8%;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start}
+.env{aspect-ratio:220/110;position:relative;background:var(--light);color:var(--dark);box-shadow:0 1px 2px rgba(0,0,0,.12),0 8px 24px rgba(0,0,0,.08)}
+.env-in{position:absolute;inset:9% 6%;display:flex;flex-direction:column;gap:var(--s1);align-items:flex-start}
+.env-window{position:absolute;right:6%;bottom:12%;width:44%;height:34%;border:1px solid color-mix(in srgb,var(--dark) 22%,transparent)}
+.sheet-a4{aspect-ratio:210/297;background:var(--light);color:var(--dark);position:relative;box-shadow:0 1px 2px rgba(0,0,0,.12),0 8px 24px rgba(0,0,0,.08)}
+.a4-in{position:absolute;inset:9% 10%;display:flex;flex-direction:column;gap:5%}
+.browser{border:1px solid var(--rule);background:var(--light);color:var(--dark);overflow:hidden}
+.browser-bar{display:flex;justify-content:center;padding:.6cqw;border-bottom:1px solid color-mix(in srgb,var(--dark) 15%,transparent);background:color-mix(in srgb,var(--dark) 4%,var(--light))}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:var(--s2) var(--s3)}
+.nav-links{display:flex;gap:var(--s3);align-items:center}
+.btn{display:inline-block;background:var(--accent);color:var(--on-accent);padding:.7em 1.2em;border-radius:var(--radius);font-weight:var(--w-strong);white-space:nowrap}
+.hero{padding:var(--s4) var(--s3);display:grid;grid-template-columns:repeat(8,1fr);column-gap:var(--g);row-gap:var(--s2)}
+.post{aspect-ratio:1;position:relative;overflow:hidden}
+.post-in{position:absolute;inset:8%;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start}
+.slide{aspect-ratio:16/9;position:relative;overflow:hidden}
+.slide-in{position:absolute;inset:6% 6.5%;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start}
+.sig{background:var(--light);color:var(--dark);border:1px solid var(--rule);padding:var(--s3);display:flex;flex-direction:column;gap:var(--s2)}
+
+/* tokens */
+.code{font-family:var(--f-mono);font-size:var(--t-meta);line-height:1.55;white-space:pre;background:var(--tint);padding:var(--s2) var(--s3);overflow:hidden}
+.dl{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s3)}
+.dl button{font:inherit;font-size:var(--t-meta);background:none;color:inherit;border:1px solid var(--rule);padding:.6em 1em;border-radius:var(--radius);cursor:pointer}
+.dl button:hover{border-color:currentColor}
+.dl button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* narrow screens: pages grow with their content, the grid folds to one column */
+@media (max-width:1099px){
+  .page{aspect-ratio:auto}
+  .sheet{position:static;min-height:calc((100vw - 48px) * .707)}
+  .grid,.full,.split,.panels,.tiles,.families,.apps,.matrix,.cover-body,.divider-body,.bar{height:auto}
+  .tiles{grid-auto-rows:minmax(22vw,auto)}
+  .code{height:auto;columns:1}
+}
+@media (max-width:760px){
+  body{padding:16px 0}#book{gap:16px}
+  .page{width:calc(100vw - 32px)}
+  .sheet{--m:20px;min-height:auto}
+  .grid>*,.head>*,.apps>*{grid-column:1/-1 !important}
+  .head{row-gap:var(--s2)}
+  .aside,.main{grid-column:1/-1}
+  .panels,.samples{grid-template-columns:1fr;row-gap:var(--s3)}
+  .panel{min-height:40vw}
+  .tiles{--cols:2 !important}
+  .traits,.families{grid-template-columns:1fr;row-gap:var(--s3)}
+  .legend{grid-template-columns:1fr 1fr}
+  .level{grid-template-columns:1fr}
+  .matrix{overflow-x:auto}
+  .apps{row-gap:var(--s3)}
+  .nav-links .link{display:none}
+  .cover-body,.divider-body,.back-body{min-height:110vw}
+  .cover-foot{flex-direction:column;align-items:start}
+  .cover-foot .t-meta{text-align:left}
+}
+@media print{
+  @page{size:A4 landscape;margin:0}
+  html{background:none}body{padding:0}#book{gap:0}
+  .page{width:297mm;height:210mm;aspect-ratio:auto;box-shadow:none;break-after:page}
+  .no-print{display:none !important}
+}
+</style>
+</head>
+<body>
+<main id="book"></main>
+<script>window.BRAND = {"name": "Levain", "tagline": "Bread the slow way", "version": "1.0", "date": "September 2026", "intake": {"feeling": "warm, honest, a bit old-fashioned", "lightness": "mostly light", "colour": "browns and a deep green", "typeVoice": "classic, with serifs", "admire": "Poilâne, Tartine, old enamel shop signs", "avoid": "supermarket bakery aisles"}, "essence": {"purpose": "We bake bread that takes its time, for neighbours who notice.", "personality": [{"word": "Patient", "line": "Nothing rushed, from the dough to the counter."}, {"word": "Neighbourly", "line": "We know your name and your usual."}, {"word": "Honest", "line": "Flour, water, salt and time. Nothing else to hide."}], "voice": [{"is": "Warm", "not": "Twee"}, {"is": "Plain", "not": "Rustic cliché"}, {"is": "Proud", "not": "Precious"}], "write": "The rye is ready at ten. It takes two days, so there are forty loaves.", "avoid": "Indulge in our delicious artisanal breads, lovingly handcrafted daily!", "letter": "Thank you for ordering the wedding loaves. We will start the levain on Thursday evening and bake on Saturday at five, so the bread reaches you still warm."}, "logo": {"clearSpace": 0.5, "unitLabel": "the height of the capital L", "minWidthPx": 80, "minWidthMm": 20, "backgrounds": ["Linen", "Straw", "Fir", "Bark"]}, "colors": [{"name": "Linen", "hex": "#F4EFE6", "role": "light", "share": 48, "use": "Pages, bags, the counter cards"}, {"name": "Bark", "hex": "#1F2A22", "role": "dark", "share": 20, "use": "Text and the shop sign"}, {"name": "Fir", "hex": "#24483A", "role": "primary", "share": 15, "use": "The name, headlines, the awning"}, {"name": "Straw", "hex": "#E6D5AE", "role": "secondary", "share": 7, "use": "Price cards and panels"}, {"name": "Tomato", "hex": "#A8452B", "role": "accent", "share": 5, "use": "One call to action, the daily special"}, {"name": "Pebble", "hex": "#6F6A60", "role": "support", "share": 5, "use": "Secondary text and small print"}], "fonts": {"display": {"family": "Young Serif", "weights": [400], "weight": 400, "fallback": "Georgia, serif", "role": "The name, headlines, price cards"}, "text": {"family": "Figtree", "weights": [400, 600], "fallback": "system-ui, sans-serif", "role": "Everything else"}}, "type": {"headlineCase": "none", "headlineTracking": -0.01, "scale": [{"level": "Display", "font": "display", "size": 80, "leading": 1.02, "tracking": -0.02}, {"level": "Headline", "font": "display", "size": 48, "leading": 1.08, "tracking": -0.01}, {"level": "Title", "font": "display", "size": 30, "leading": 1.2, "tracking": 0}, {"level": "Body", "font": "text", "size": 17, "leading": 1.55, "tracking": 0}, {"level": "Caption", "font": "text", "size": 13, "leading": 1.4, "tracking": 0.01}], "samples": {"Display": "Rye at ten", "Headline": "Two days for one loaf", "Title": "Patient, neighbourly, honest", "Body": "Our levain is fed twice a day. The dough rests overnight in the cold, then bakes at dawn.", "Caption": "Country loaf, 800 g, baked this morning"}, "rules": ["Young Serif for the name and headlines only, never for paragraphs", "Prices in Figtree semibold", "Sentence case everywhere, including the shop sign", "No italics: emphasis comes from colour or size"]}, "layout": {"radius": 8, "rules": ["Generous margins, like a paper bag with one stamp on it", "One photograph per page, never a collage"]}, "imagery": {"direction": "Early light in the bakery, flour in the air, hands at work. Bread shown whole, then cut.", "do": ["Morning light through the shop window", "Crumb and crust in close-up", "The baker's hands"], "dont": ["Baskets styled with gingham", "Stock photography", "Bread on a white seamless backdrop"]}, "contact": {"person": "Sam Okafor", "role": "Head baker", "email": "hello@levain.example", "phone": "+44 20 7946 0588", "web": "levain.example", "address": "3 Mill Lane, London", "brandContact": "brand@levain.example"}, "cta": "Order for Saturday", "navLinks": ["Bread", "Pastry", "Visit"], "social": "The rye is back. Forty loaves, from ten.", "slideTitle": "Wholesale, spring 2027", "never": ["Write the word artisanal", "Use Tomato for anything but one action per page", "Set text in italics", "Put the name in capitals", "Use more than one photograph per page", "Borrow the look of a supermarket bakery aisle"], "explore": {"palettes": [{"name": "Market", "why": "Green leads, like a market stall awning. Terracotta for the one thing to buy.", "colors": [{"name": "Linen", "hex": "#F4EFE6", "role": "light", "share": 48, "use": "Pages, bags, the counter cards"}, {"name": "Bark", "hex": "#1F2A22", "role": "dark", "share": 20, "use": "Text and the shop sign"}, {"name": "Fir", "hex": "#24483A", "role": "primary", "share": 15, "use": "The name, headlines, the awning"}, {"name": "Straw", "hex": "#E6D5AE", "role": "secondary", "share": 7, "use": "Price cards and panels"}, {"name": "Tomato", "hex": "#A8452B", "role": "accent", "share": 5, "use": "One call to action, the daily special"}, {"name": "Pebble", "hex": "#6F6A60", "role": "support", "share": 5, "use": "Secondary text and small print"}]}, {"name": "Crust", "why": "Warm browns from the oven, with a deep basil green for action.", "colors": [{"name": "Flour", "hex": "#F6F1E7", "role": "light", "share": 45}, {"name": "Rye", "hex": "#2B211B", "role": "dark", "share": 20}, {"name": "Crust", "hex": "#7A4A2A", "role": "primary", "share": 15}, {"name": "Wheat", "hex": "#E4CFA3", "role": "secondary", "share": 8}, {"name": "Basil", "hex": "#2F5D3A", "role": "accent", "share": 5}, {"name": "Ash", "hex": "#6E655C", "role": "support", "share": 7}]}, {"name": "Bakehouse", "why": "Charcoal and butter: quieter, more grown-up.", "colors": [{"name": "Butter", "hex": "#FAF4E1", "role": "light", "share": 45}, {"name": "Coal", "hex": "#1C1B19", "role": "dark", "share": 25}, {"name": "Umber", "hex": "#5A3B2E", "role": "primary", "share": 14}, {"name": "Sesame", "hex": "#E9DDC2", "role": "secondary", "share": 6}, {"name": "Leaf", "hex": "#3E6B4A", "role": "accent", "share": 6}, {"name": "Smoke", "hex": "#6A635A", "role": "support", "share": 4}]}], "pairings": [{"display": "Young Serif", "text": "Figtree", "why": "Warm and a little old-fashioned, like a painted shop sign."}, {"display": "Fraunces", "text": "Work Sans", "why": "Softer and more hand-made."}, {"display": "Libre Caslon Text", "text": "Public Sans", "why": "Classic and trusted, a village bakery rather than a chain."}, {"display": "Caprasimo", "text": "Karla", "why": "Rounder and friendlier, for a bakery with a café."}], "shortlist": {"display": ["Young Serif", "Fraunces", "Libre Caslon Text", "Caprasimo", "Gloock", "Spectral"], "text": ["Figtree", "Work Sans", "Public Sans", "Karla", "Instrument Sans", "Hanken Grotesk"]}}};</script>
+<script>
+(function () {
+  const B = window.BRAND;
+  const book = document.getElementById('book');
+  if (!B) {
+    book.innerHTML = '<p class="empty">This is the empty template. Build a brand book with <code>python scripts/build.py book brand.json</code>.</p>';
+    return;
+  }
+
+  /* ---------- helpers ---------- */
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const rgb = h => { h = h.replace('#', ''); if (h.length === 3) h = [...h].map(c => c + c).join(''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
+  const lum = h => { const [r, g, b] = rgb(h).map(v => { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const colors = B.colors;
+  const byRole = r => colors.find(c => c.role === r);
+  const byName = n => colors.find(c => c.name.toLowerCase() === String(n).toLowerCase());
+  const C = {
+    dark: byRole('dark').hex, light: byRole('light').hex, primary: byRole('primary').hex,
+    accent: byRole('accent').hex, secondary: (byRole('secondary') || byRole('primary')).hex,
+  };
+  const on = bg => ratio(bg, C.dark) >= ratio(bg, C.light) ? C.dark : C.light;
+  const best = (bg, options) => options.slice().sort((a, b) => ratio(bg, b) - ratio(bg, a))[0];
+  const nameOf = hex => (colors.find(c => c.hex.toLowerCase() === hex.toLowerCase()) || {}).name || hex.toUpperCase();
+  const words = n => ['zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'][n] || String(n);
+  const roleLabel = { dark: 'Base, dark', light: 'Base, light', primary: 'Primary', secondary: 'Secondary', accent: 'Accent', support: 'Support' };
+
+  /* ---------- fonts ---------- */
+  const F = B.fonts;
+  const stack = f => f ? `"${f.family}", ${f.fallback || 'sans-serif'}` : null;
+  function loadFont(f) {
+    if (!f) return;
+    if (f.src) { new FontFace(f.family, `url("${f.src}")`).load().then(x => document.fonts.add(x)).catch(() => {}); return; }
+    if (f.local) return; // installed on the reader's machine, nothing to fetch
+    const w = [...new Set(f.weights || [])].sort((a, b) => a - b);
+    const q = encodeURIComponent(f.family).replace(/%20/g, '+') + (w.length ? ':wght@' + w.join(';') : '');
+    const l = document.createElement('link');
+    l.rel = 'stylesheet'; l.href = `https://fonts.googleapis.com/css2?family=${q}&display=swap`;
+    document.head.appendChild(l);
+  }
+  [F.display, F.text, F.mono].forEach(loadFont);
+  const T = B.type || {};
+  const maxW = f => Math.max(...(f.weights || [400]));
+  const rootStyle = document.documentElement.style;
+  const set = (k, v) => rootStyle.setProperty(k, v);
+  set('--f-display', stack(F.display)); set('--f-text', stack(F.text)); set('--f-mono', stack(F.mono || F.text));
+  set('--w-display', F.display.weight || (F.display.weights || [400])[0]);
+  set('--w-display-strong', maxW(F.display));
+  set('--w-strong', maxW(F.text));
+  set('--case', T.headlineCase === 'upper' ? 'uppercase' : 'none');
+  set('--track', (T.headlineTracking ?? (T.headlineCase === 'upper' ? 0.04 : -0.015)) + 'em');
+  set('--radius', ((B.layout || {}).radius ?? 2) + 'px');
+  set('--accent', C.accent); set('--on-accent', on(C.accent));
+  set('--secondary', C.secondary); set('--on-secondary', on(C.secondary));
+  set('--light', C.light); set('--dark', C.dark);
+
+  /* ---------- logo ---------- */
+  const L = B.logo || {};
+  if (L.src) set('--logo', `url("${L.src}")`);
+  const R = L.src ? (L.ratio || 3) : Math.max(1.2, B.name.length * 0.62);
+  const mainColor = (L.color && byName(L.color) ? byName(L.color).hex : C.primary);
+  // h from the space available: never taller than maxH, never wider than maxW (both in cqw)
+  const fit = (maxW, maxH) => Math.min(maxH, maxW / R).toFixed(2) + 'cqw';
+  const minW = L.minWidthPx || (L.src ? 96 : 80);
+  // The book never shows the logo below its own minimum size, except on the misuse tile that says so.
+  function logo(color, h, style = '', tiny = false) {
+    // a wordmark is text: its floor is also the 12 px text floor
+    if (!tiny) h = `max(${(L.src ? minW / R : Math.max(12, minW / R)).toFixed(1)}px, ${h})`;
+    const grad = color.includes('gradient');
+    const mark = tiny ? ' data-intentional="below minimum size, on purpose"' : '';
+    if (L.src) return `<span class="logo"${mark} role="img" aria-label="${esc(B.name)} logo" style="height:${h};aspect-ratio:${R};background:${color};${style}"></span>`;
+    const paint = grad ? `background:${color};-webkit-background-clip:text;background-clip:text;color:transparent` : `color:${color}`;
+    return `<span class="wordmark"${mark} style="font-size:${h};${paint};${style}">${esc(B.name)}</span>`;
+  }
+  const logoOriginal = h => (L.src && L.fullColour)
+    ? `<img class="logo-img" src="${L.src}" alt="${esc(B.name)} logo" style="height:${h}">`
+    : logo(mainColor, h);
+
+  /* ---------- copy defaults (brand.json may override every line) ---------- */
+  const E = B.essence || {};
+  const LY = B.layout || {};
+  const IM = B.imagery || {};
+  const K = B.contact || {};
+  const intro = Object.assign({
+    'Essence': 'Who we are, what we stand for, and how we sound.',
+    'Logo': 'The mark, the space it needs, and the ways it must never be used.',
+    'Colour': `${words(colors.length)} colours, each with one job.`,
+    'Typography': `${words(F.mono ? 3 : 2)} families and one hierarchy.`,
+    'Layout and imagery': 'One grid, one margin, one way of framing the world.',
+    'Applications': 'The system at work, on the surfaces people actually hold.',
+  }, B.chapters || {});
+  const scale = T.scale || [
+    { level: 'Display', font: 'display', size: 72, leading: 1.05, tracking: -0.02 },
+    { level: 'Headline', font: 'display', size: 44, leading: 1.1, tracking: -0.01 },
+    { level: 'Title', font: 'display', size: 28, leading: 1.2, tracking: 0 },
+    { level: 'Body', font: 'text', size: 16, leading: 1.5, tracking: 0 },
+    { level: 'Caption', font: 'text', size: 13, leading: 1.4, tracking: 0.01 },
+  ];
+  const samples = Object.assign({
+    Display: B.name, Headline: B.tagline || E.purpose || B.name,
+    Title: (E.personality || []).map(p => p.word || p).join(', '),
+    Body: E.purpose || B.tagline || '', Caption: `${B.name}, brand guidelines`,
+  }, T.samples || {});
+
+  /* ---------- pages ---------- */
+  const pages = [];
+  let chapter = '';
+  const add = (kind, bg, html) => pages.push({ kind, bg, html, chapter });
+  const head = (title, text) => `<div class="head"><h2 class="t-title">${esc(title)}</h2>${text ? `<p class="t-body">${esc(text)}</p>` : ''}</div>`;
+  const dividerBgs = [C.primary, C.dark, C.secondary];
+  let dIndex = 0;
+  function divider(name) {
+    chapter = name;
+    const bg = dividerBgs[dIndex++ % dividerBgs.length];
+    add('divider', bg, () => `<div class="divider-body"><p class="t-lede">${esc(intro[name])}</p><h2 class="t-hero">${esc(name)}</h2></div>`);
+  }
+
+  // Cover
+  add('cover', C.primary, () => `<div class="cover-body">
+    <div>${logo(on(C.primary), fit(46, 12))}</div>
+    <div class="cover-foot"><h1 class="t-display">Brand guidelines</h1>
+    <p class="t-meta">Version ${esc(B.version || '1.0')}${B.date ? '<br>' + esc(B.date) : ''}</p></div></div>`);
+
+  // Contents
+  chapter = 'Contents';
+  add('content', C.light, () => {
+    const rows = pages.map((p, i) => p.kind === 'divider' ? `<li><span class="t-lede">${esc(p.chapter)}</span><span class="t-lede">${i + 1}</span></li>` : '').join('');
+    return `<div class="grid"><h2 class="t-title" style="grid-column:1/5">Contents</h2><ol class="toc" style="grid-column:7/13">${rows}</ol></div>`;
+  });
+
+  // Essence
+  divider('Essence');
+  const traits = (E.personality || []).map(p => typeof p === 'string' ? { word: p } : p);
+  add('content', C.light, () => `<div class="split">
+    <p class="t-display" style="max-width:20ch">${esc(E.purpose || B.tagline || '')}</p>
+    <div class="traits" style="--k:${Math.max(traits.length, 1)}">${traits.map(t => `<div class="rule stack"><h3 class="t-title">${esc(t.word)}</h3>${t.line ? `<p class="t-body">${esc(t.line)}</p>` : ''}</div>`).join('')}</div></div>`);
+  add('content', C.light, () => `<div class="split">
+    <div class="grid" style="height:auto"><div class="aside stack"><h2 class="t-title">Voice</h2><p class="t-body">${esc(E.voiceNote || 'Our voice stays the same everywhere. Our tone adapts to the reader and the moment.')}</p></div>
+    <div class="main"><table class="pairs"><thead><tr><th>We are</th><th>We are not</th></tr></thead><tbody>
+    ${(E.voice || []).map(v => `<tr><td>${esc(v.is)}</td><td>${esc(v.not)}</td></tr>`).join('')}</tbody></table></div></div>
+    ${E.write ? `<div class="samples"><div class="rule stack"><p class="t-meta">Write this</p><p class="t-lede">${esc(E.write)}</p></div>
+    <div class="rule stack"><p class="t-meta">Not this</p><p class="t-lede strike">${esc(E.avoid || '')}</p></div></div>` : ''}</div>`);
+
+  // Logo
+  divider('Logo');
+  add('content', C.light, () => `<div class="full">${head('The logo', L.note || `Use the logo in ${nameOf(mainColor)} on light backgrounds and in ${nameOf(C.light)} on dark ones. Always start from the master files. Never redraw, retype or rebuild it.`)}
+    <div class="panels"><div class="panel">${logoOriginal(fit(30, 9))}</div>
+    <div class="panel" style="background:${C.dark};border-color:${C.dark}">${logo(C.light, fit(30, 9))}</div>
+    <p class="cap">Primary, on ${esc(nameOf(C.light))}</p><p class="cap">Reversed, on ${esc(nameOf(C.dark))}</p></div></div>`);
+
+  const cs = L.clearSpace ?? 0.5;
+  add('content', C.light, () => {
+    const h = parseFloat(fit(34, 8)); const x = (h * cs).toFixed(2) + 'cqw';
+    const q = (t, l) => `<span class="xq" style="${t}:0;${l}:0">x</span>`;
+    return `<div class="grid"><div class="aside stack"><h2 class="t-title">Clear space and minimum size</h2>
+      <p class="t-body">Clear space is measured in x, where x is ${esc(L.unitLabel || 'half the height of the logo')}. Keep at least x free on every side. Nothing enters that area: no text, no image edge, no other logo.</p>
+      <p class="t-body">Minimum width: ${minW} px on screen, ${L.minWidthMm || 25} mm in print.${L.smallUse ? ' ' + esc(L.smallUse) : ''}</p></div>
+      <div class="main" style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);column-gap:var(--g);height:100%">
+        <div class="cs-wrap"><div class="cs-box" style="--x:${x}">${logoOriginal(h + 'cqw')}${q('top', 'left')}${q('top', 'right')}${q('bottom', 'left')}${q('bottom', 'right')}</div></div>
+        <div class="minsize"><div class="rule"><p class="t-meta">Screen, actual size</p></div>
+          <div>${L.src ? logo(mainColor, (minW / R).toFixed(1) + 'px') : logo(mainColor, (minW / R).toFixed(1) + 'px')}</div>
+          <p class="t-meta">${minW} px wide</p>
+          <div class="rule"><p class="t-meta">Print</p></div><p class="t-meta">${L.minWidthMm || 25} mm wide</p></div></div></div>`;
+  });
+
+  const approved = L.backgrounds ? L.backgrounds.map(n => (byName(n) || {}).hex).filter(Boolean)
+    : colors.map(c => c.hex).filter(h => ratio(h, best(h, [mainColor, C.dark, C.light])) >= 3);
+  add('content', C.light, () => {
+    const cols = colors.length > 6 ? 4 : 3;
+    const tiles = colors.map(c => {
+      const ok = approved.includes(c.hex);
+      const fg = best(c.hex, [mainColor, C.dark, C.light]);
+      return `<figure class="tile"><div class="tile-face${c.hex === C.light ? ' bordered' : ''}" style="background:${c.hex}">${logo(fg, fit(15, 3.4))}</div>
+        <figcaption class="cap">${ok ? 'Approved' : 'Avoid'}, on ${esc(c.name)}</figcaption></figure>`;
+    }).join('');
+    return `<div class="full">${head('Backgrounds', 'The approved backgrounds are a closed list. On any other colour, the logo does not appear.')}<div class="tiles" style="--cols:${cols}">${tiles}</div></div>`;
+  });
+
+  add('content', C.light, () => {
+    const hL = fit(13, 3.2);
+    const pal = colors.map(c => rgb(c.hex));
+    const dist = h => Math.min(...pal.map(p => Math.hypot(...rgb(h).map((v, i) => v - p[i]))));
+    const off = ['#7B2FF7', '#00C853', '#FF2D95', '#FFB300'].sort((a, b) => dist(b) - dist(a))[0];
+    const faint = colors.filter(c => c.hex !== C.light).sort((a, b) => ratio(a.hex, C.light) - ratio(b.hex, C.light))[0].hex;
+    const all = {
+      stretch: ['Do not stretch or squash it.', '', logo(mainColor, hL, 'transform:scaleX(1.5)')],
+      rotate: ['Do not rotate it.', '', logo(mainColor, hL, 'transform:rotate(-14deg)')],
+      recolor: ['Do not recolour it outside the palette.', '', logo(off, hL)],
+      effects: ['Do not add shadows, gradients or effects.', '', `<span style="filter:drop-shadow(.3cqw .3cqw .25cqw rgba(0,0,0,.45))">${logo(`linear-gradient(90deg,${C.accent},${C.primary})`, hL)}</span>`],
+      busy: ['Do not place it on busy backgrounds.', `background:repeating-linear-gradient(45deg,${C.secondary} 0 .9cqw,${C.accent} .9cqw 1.8cqw,${C.light} 1.8cqw 2.7cqw)`, logo(mainColor, hL)],
+      contrast: ['Do not place it on low-contrast colours.', '', logo(faint, hL)],
+      crowd: ['Do not crowd it inside its clear space.', '', `<span class="crowd">${logo(mainColor, fit(9, 2.6))}<span class="t-meta" style="max-width:9ch;text-align:left">${esc(L.crowdText || 'New season, in store now')}</span></span>`],
+      small: ['Do not use it below the minimum size.', '', logo(mainColor, fit(3, .8), '', true)],
+    };
+    const keys = (L.misuse || Object.keys(all)).filter(k => all[k]);
+    return `<div class="full">${head('Misuse', 'These are the mistakes that come up most, and the guidelines of the largest brands all ban them.')}
+      <div class="tiles" style="--cols:4">${keys.map(k => `<figure class="tile"><div class="tile-face${all[k][1] ? '' : ' bordered'}" style="${all[k][1]}">${all[k][2]}</div><figcaption class="cap">${all[k][0]}</figcaption></figure>`).join('')}</div></div>`;
+  });
+
+  // Colour
+  divider('Colour');
+  add('content', C.light, () => {
+    const cols = colors.length > 6 ? 4 : 3;
+    return `<div class="full">${head('Palette', B.paletteNote || 'Screen values below. Print values (CMYK, Pantone) are set with the printer from a physical proof, never converted by software.')}
+      <div class="tiles" style="--cols:${cols}">${colors.map(c => `<figure class="tile">
+        <div class="chip" style="background:${c.hex};color:${on(c.hex)}${c.hex === C.light ? ';box-shadow:inset 0 0 0 1px var(--rule)' : ''}"><span class="t-title">${esc(c.name)}</span><span class="t-meta">${roleLabel[c.role] || ''}</span></div>
+        <figcaption class="cap mono">${c.hex.toUpperCase()}&nbsp;&nbsp;RGB ${rgb(c.hex).join(' ')}</figcaption></figure>`).join('')}</div></div>`;
+  });
+  add('content', C.light, () => {
+    const segs = colors.slice().sort((a, b) => (b.share || 0) - (a.share || 0));
+    return `<div class="full">${head('Proportions', 'How much of each colour a typical page shows. The base colours carry the surface. The accent is rationed.')}
+      <div class="split"><div class="bar">${segs.map(c => `<span style="flex:${c.share || 1};background:${c.hex};color:${on(c.hex)}${c.hex === C.light ? ';box-shadow:inset 0 0 0 1px var(--rule)' : ''}"><span class="t-meta">${(c.share || 0) >= 8 ? esc(c.name) + ' ' + c.share + '%' : ''}</span></span>`).join('')}</div>
+      <div class="legend">${segs.map(c => `<div class="rule"><p class="t-meta"><span class="dot" style="background:${c.hex}"></span>${esc(c.name)}, ${c.share || 0}%</p><p class="t-meta">${esc(c.use || '')}</p></div>`).join('')}</div></div></div>`;
+  });
+  add('content', C.light, () => `<div class="full">${head('Accessible pairs', 'Text colour down the side, background along the top, contrast ratio in each cell. Body text needs 4.5 or more. Large text and interface elements need 3 or more. Below 3, never.')}
+    <div class="matrix" style="--n:${colors.length}"><span></span>${colors.map(c => `<span class="t-meta mh">${esc(c.name)}</span>`).join('')}
+    ${colors.map(f => `<span class="t-meta mr">${esc(f.name)}</span>` + colors.map(b => {
+      if (f === b) return `<span class="cell" style="background:${b.hex}"></span>`;
+      const r = ratio(f.hex, b.hex);
+      return `<span class="cell" style="background:${b.hex}" title="${esc(f.name)} on ${esc(b.name)}: ${r.toFixed(2)}"><span class="aa" style="color:${f.hex}">Aa</span><span class="t-meta" style="color:${on(b.hex)}">${r.toFixed(1)}</span></span>`;
+    }).join('')).join('')}</div></div>`);
+
+  // Typography
+  divider('Typography');
+  const fams = [['Display', F.display], ['Text', F.text]].concat(F.mono ? [['Mono', F.mono]] : []);
+  const wName = { 100: 'Thin', 200: 'Extra light', 300: 'Light', 400: 'Regular', 500: 'Medium', 600: 'Semibold', 700: 'Bold', 800: 'Extra bold', 900: 'Black' };
+  add('content', C.light, () => `<div class="full">${head('Families', T.familiesNote || 'Each family has one job. Two weights per family are enough.')}
+    <div class="families" style="--k:${fams.length}">${fams.map(([role, f]) => `<div class="family">
+      <p class="t-meta">${role}</p><p class="aa" style="font-family:${esc(stack(f))};font-weight:${f.weight || (f.weights || [400])[0]}">Aa</p>
+      <p class="t-title" style="text-transform:none;letter-spacing:0">${esc(f.family)}</p>
+      <p class="t-meta">${(f.weights || [400]).map(w => (wName[w] || w) + ' ' + w).join(', ')}</p>
+      <p class="t-body" style="font-family:${esc(stack(f))};word-break:break-all">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 &amp;?!%€$@</p>
+      ${f.role ? `<p class="t-meta">${esc(f.role)}</p>` : ''}</div>`).join('')}</div></div>`);
+  add('content', C.light, () => `<div class="grid"><div class="aside stack"><h2 class="t-title">Hierarchy</h2>
+    <p class="t-body">Specimens shown at their real proportions. Sizes are for screen; in print, 1 px equals 0.75 pt.</p>
+    ${(T.rules || []).length ? `<ul class="bullets">${T.rules.map(r => `<li class="t-body">${esc(r)}</li>`).join('')}</ul>` : ''}</div>
+    <div class="main levels">${scale.map(s => {
+      const f = s.font === 'display' ? F.display : (s.font === 'mono' ? (F.mono || F.text) : F.text);
+      const isHead = s.font === 'display';
+      const style = `font-family:${esc(stack(f))};--cq:${(s.size / 12).toFixed(3)};font-size:max(12px,calc(var(--cq) * var(--k,1) * 1cqw));line-height:${s.leading};letter-spacing:${s.tracking}em;font-weight:${s.weight || (isHead ? (F.display.weight || F.display.weights[0]) : 400)};${isHead ? 'text-transform:var(--case);' : ''}`;
+      return `<div class="level"><p class="t-meta">${esc(s.level)}<br>${s.size} px, ${Math.round(s.size * s.leading)} px leading${s.tracking ? ', ' + (s.tracking > 0 ? '+' : '') + Math.round(s.tracking * 1000) / 10 + '% tracking' : ''}</p>
+        <p class="spec${s.size > 24 ? ' one-line' : ''}" style="${style}">${esc(samples[s.level] || s.level)}</p></div>`;
+    }).join('')}</div></div>`);
+
+  // Layout and imagery
+  divider('Layout and imagery');
+  add('content', C.light, () => `<div class="grid"><div class="aside stack"><h2 class="t-title">Grid and margins</h2>
+    <ul class="bullets">
+      <li class="t-body">${LY.columns || 12} columns, gutter of ${LY.gutter || 2} units</li>
+      <li class="t-body">Base unit of ${LY.unit || 8} px: every size and space is a multiple of it</li>
+      <li class="t-body">Margin and logo clear space: ${esc(LY.margin || '5% of the shortest side of the format')}</li>
+      <li class="t-body">Corner radius: ${(LY.radius ?? 2)} px${(LY.radius ?? 2) === 0 ? ', square corners everywhere' : ''}</li>
+      ${(LY.rules || []).map(r => `<li class="t-body">${esc(r)}</li>`).join('')}</ul></div>
+    <figure class="main"><div class="mock"><div class="mock-cols">${'<span></span>'.repeat(12)}</div>
+      <div class="mock-in"><div style="grid-column:1/4">${logo(mainColor, (3.2 * Math.min(1, 4 / R)).toFixed(2) + 'cqw')}</div>
+      <div style="grid-column:1/8;align-self:end;display:flex;flex-direction:column;gap:6cqw">
+        <p style="font:var(--w-display) max(14px,5.6cqw)/1.05 var(--f-display);letter-spacing:var(--track);text-transform:var(--case)">${esc(B.tagline || B.name)}</p>
+        <p style="font:max(12px,2.2cqw)/1.5 var(--f-text);max-width:32ch">${esc(E.purpose || '')}</p></div>
+      <div class="mock-img" style="grid-column:8/13;grid-row:1/3">Image area, spans columns 8 to 12</div></div></div>
+      <figcaption class="cap">Columns shown in ${esc(nameOf(C.accent))} at 16%. Content aligns to column edges, never to the gutter.</figcaption></figure></div>`);
+  add('content', C.light, () => {
+    const imgs = (IM.images || []).slice(0, 3);
+    return `<div class="grid"><div class="aside stack"><h2 class="t-title">Imagery</h2><p class="t-body">${esc(IM.direction || '')}</p></div>
+      <div class="main split">${imgs.length ? `<div style="display:grid;grid-template-columns:repeat(${imgs.length},1fr);gap:var(--g)">${imgs.map(i => `<figure><img src="${i.src}" alt="${esc(i.caption || '')}" style="width:100%;aspect-ratio:4/5;object-fit:cover;display:block"><figcaption class="cap">${esc(i.caption || '')}</figcaption></figure>`).join('')}</div>` : ''}
+      <div class="samples"><div><p class="t-meta">Do</p><ul class="bullets">${(IM.do || []).map(d => `<li class="${imgs.length ? 't-body' : 't-lede'}">${esc(d)}</li>`).join('')}</ul></div>
+      <div><p class="t-meta">Do not</p><ul class="bullets">${(IM.dont || []).map(d => `<li class="${imgs.length ? 't-body' : 't-lede'}">${esc(d)}</li>`).join('')}</ul></div></div></div></div>`;
+  });
+
+  // Applications
+  divider('Applications');
+  const contactLines = [K.email, K.phone, K.web].filter(Boolean);
+  add('content', C.light, () => `<div class="full">${head('Stationery', 'Business card, letterhead and envelope.')}
+    <div class="apps"><div style="grid-column:1/5;display:flex;flex-direction:column;gap:var(--s3)">
+      <figure><div class="card" style="background:${C.primary}"><div class="card-in" style="align-items:center;justify-content:center">${logo(on(C.primary), fit(16, 3.6))}</div></div><figcaption class="cap">Business card, front, 85 × 55 mm</figcaption></figure>
+      <figure><div class="card" style="background:${C.light};color:${C.dark}"><div class="card-in">${logo(mainColor, fit(9, 1.6))}
+        <div><p class="t-body"><b>${esc(K.person || '')}</b><br>${esc(K.role || '')}</p><p class="t-meta">${contactLines.map(esc).join('<br>')}</p></div></div></div><figcaption class="cap">Business card, back</figcaption></figure></div>
+    <figure style="grid-column:9/13;order:2"><div class="env"><div class="env-in">${logo(mainColor, fit(8, 1.5))}<p class="t-meta">${esc(K.address || '')}</p></div><div class="env-window"></div></div>
+      <figcaption class="cap">Envelope, DL, 220 × 110 mm</figcaption></figure>
+    <figure style="grid-column:5/9"><div class="sheet-a4"><div class="a4-in"><div style="display:flex;justify-content:space-between;align-items:start;gap:var(--s2)">${logo(mainColor, fit(9, 1.6))}<p class="t-meta" style="text-align:right;max-width:16ch">${esc(K.address || '')}</p></div>
+      <p class="t-meta" style="margin-top:8%">${esc(B.date || '')}</p><p class="t-meta">${esc(E.letter || E.purpose || '')}</p>
+      <p class="t-meta" style="margin-top:auto;border-top:1px solid color-mix(in srgb,${C.dark} 20%,transparent);padding-top:3%">${contactLines.map(esc).join(', ')}</p></div></div>
+      <figcaption class="cap">Letterhead, A4</figcaption></figure></div></div>`);
+  add('content', C.light, () => `<div class="full">${head('Digital', 'Website and social media.')}
+    <div class="apps"><figure style="grid-column:1/9"><div class="browser"><div class="browser-bar"><span class="t-meta">${esc(K.web || '')}</span></div>
+      <div class="nav">${logo(mainColor, fit(10, 1.8))}<div class="nav-links t-meta">${(B.navLinks || ['Shop', 'About', 'Journal']).map(l => `<span class="link">${esc(l)}</span>`).join('')}<span class="btn">${esc(B.cta || 'Get in touch')}</span></div></div>
+      <div class="hero"><p class="t-display" style="grid-column:1/8;font-size:max(30px,4.6cqw)">${esc(B.tagline || B.name)}</p>
+      <p class="t-body" style="grid-column:1/6">${esc(E.purpose || '')}</p><p style="grid-column:1/6"><span class="btn t-meta">${esc(B.cta || 'Get in touch')}</span></p></div></div>
+      <figcaption class="cap">Website, first screen</figcaption></figure>
+    <figure style="grid-column:9/13"><div class="post" style="background:${C.dark};color:${C.light}"><div class="post-in">${logo(C.light, fit(9, 1.8))}
+      <p class="t-title" style="font-size:max(20px,2.6cqw)">${esc(B.social || E.purpose || B.tagline || '')}</p><p class="t-meta">${esc(K.web || '')}</p></div></div>
+      <figcaption class="cap">Social post, 1080 × 1080</figcaption></figure></div></div>`);
+  add('content', C.light, () => `<div class="full">${head('Presentations and email', 'Title slide and email signature.')}
+    <div class="apps"><figure style="grid-column:1/9"><div class="slide" style="background:${C.primary};color:${on(C.primary)}"><div class="slide-in">${logo(on(C.primary), fit(10, 2))}
+      <p class="t-display" style="font-size:max(30px,4.6cqw);max-width:16ch">${esc(B.slideTitle || B.tagline || B.name)}</p><p class="t-meta">${esc(B.date || '')}</p></div></div>
+      <figcaption class="cap">Title slide, 16:9</figcaption></figure>
+    <figure style="grid-column:9/13"><div class="sig"><p class="t-body"><b>${esc(K.person || '')}</b><br>${esc(K.role || '')}, ${esc(B.name)}</p>
+      <p class="t-meta">${contactLines.map(esc).join('<br>')}</p><div style="border-top:1px solid color-mix(in srgb,${C.dark} 20%,transparent);padding-top:var(--s2)">${logo(mainColor, fit(9, 1.6))}</div></div>
+      <figcaption class="cap">Email signature. Host the logo image online: most mail clients block embedded images.</figcaption></figure></div></div>`);
+
+  // Never
+  chapter = 'Never';
+  add('content', C.light, () => `<div class="grid"><div class="aside stack"><h2 class="t-title">Never</h2><p class="t-body">${esc(B.neverNote || 'The shortest way to break the brand. When in doubt, check this page first.')}</p></div>
+    <ul class="main bullets" style="columns:${(B.never || []).length > 6 ? 2 : 1};column-gap:var(--g)">${(B.never || []).map(n => `<li class="t-lede" style="break-inside:avoid">${esc(n)}</li>`).join('')}</ul></div>`);
+
+  // Tokens
+  chapter = 'Tokens';
+  const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const tokens = [':root {',
+    ...colors.map(c => `  --color-${slug(c.name)}: ${c.hex.toUpperCase()};`), '',
+    `  --font-display: ${stack(F.display)};`, `  --font-text: ${stack(F.text)};`, ...(F.mono ? [`  --font-mono: ${stack(F.mono)};`] : []), '',
+    ...scale.map(s => `  --type-${slug(s.level)}: ${s.size}px/${s.leading};`), '',
+    `  --space-unit: ${LY.unit || 8}px;`, `  --radius: ${LY.radius ?? 2}px;`, '}'].join('\n');
+  add('content', C.light, () => `<div class="grid"><div class="aside stack"><h2 class="t-title">Tokens</h2>
+    <p class="t-body">The same values, ready for code. Download them, or copy them from here.</p>
+    <div class="dl no-print"><button type="button" data-dl="tokens.css">Download tokens.css</button><button type="button" data-dl="brand.json">Download brand.json</button></div>
+    ${K.brandContact ? `<p class="t-body">Questions: ${esc(K.brandContact)}</p>` : ''}</div>
+    <div class="main"><div class="code">${esc(tokens)}</div></div></div>`);
+
+  // Back cover
+  chapter = '';
+  add('back', C.dark, () => `<div class="back-body">${logo(C.light, fit(26, 6))}<p class="t-meta">${esc([K.brandContact || K.email, K.web].filter(Boolean).join('  ·  '))}</p></div>`);
+
+  /* ---------- render ---------- */
+  book.innerHTML = pages.map((p, i) => {
+    const chrome = p.kind === 'content';
+    return `<section class="page" style="--bg:${p.bg};--fg:${on(p.bg)}" aria-label="${esc((p.chapter || B.name) + ', page ' + (i + 1))}"><div class="sheet">
+      ${chrome ? `<header class="run"><span>${esc(B.name)}</span><span>${esc(p.chapter)}</span></header>` : '<span></span>'}
+      <div class="body">${p.html()}</div>
+      ${chrome ? `<footer class="run"><span>Brand guidelines, version ${esc(B.version || '1.0')}</span><span>${i + 1}</span></footer>` : '<span></span>'}
+    </div></section>`;
+  }).join('');
+  document.title = `${B.name}, brand guidelines`;
+
+  // A specimen wider than its column is scaled down to fit, and its caption says by how much.
+  document.fonts.ready.then(() => document.querySelectorAll('.spec').forEach(el => {
+    if (!el.classList.contains('one-line')) return;
+    const k = el.clientWidth / el.scrollWidth;
+    if (k >= 1) return;
+    el.style.setProperty('--k', (Math.floor(k * 100) / 100).toFixed(2));
+    el.previousElementSibling.insertAdjacentHTML('beforeend', `<br>Shown at ${Math.floor(k * 100)}%`);
+  }));
+
+  book.addEventListener('click', e => {
+    const f = e.target.closest('[data-dl]'); if (!f) return;
+    const name = f.dataset.dl;
+    const clean = JSON.parse(JSON.stringify(B)); if (clean.logo) delete clean.logo.src;
+    const body = name === 'tokens.css' ? tokens + '\n' : JSON.stringify(clean, null, 2);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([body], { type: name.endsWith('.css') ? 'text/css' : 'application/json' }));
+    a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+})();
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 One file drives both pages. The explorer and the book read it, `check.py` validates it, `build.py`
 embeds the logo and images into it. Never edit the built HTML: change `brand.json` and rebuild.
-A complete working example lives in `docs/example/brand.json` in this skill's repository.
+A complete working example lives in `docs/maren/brand.json` in this skill's repository.
 
 ## Fields
 
