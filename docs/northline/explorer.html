@@ -6,6 +6,7 @@
 <title>Brand explorer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&text=TAYKON&display=swap">
 <style>
 /* Explorer: pick between proposals, tune the palette and the fonts, see them live, send the
    choices back. The tool's own interface stays neutral so the brand is the only colour on screen. */
@@ -70,6 +71,9 @@ button,input,select{font:inherit;color:inherit}
 .primary{background:var(--ui-ink);color:#fff;border:0;border-radius:6px;padding:9px 14px;cursor:pointer;font-weight:600}
 .ghost{background:none;border:1px solid var(--ui-line);border-radius:6px;padding:8px 12px;cursor:pointer}
 .status{color:var(--ui-soft);font-size:12px;flex-basis:100%}
+.credit{flex-basis:100%;display:flex;align-items:baseline;gap:6px;font-size:12px;color:var(--ui-soft);text-decoration:none}
+.credit:hover{color:var(--ui-ink)}
+.credit b{font:400 15px/1 'DM Serif Display',Georgia,serif;letter-spacing:-.01em;text-transform:uppercase;color:var(--ui-ink)}
 
 /* preview */
 .preview{padding:32px;display:flex;flex-direction:column;gap:24px;min-width:0}
@@ -259,7 +263,7 @@ button,input,select{font:inherit;color:inherit}
     return `<aside class="panel"><div class="panel-head"><h1>${esc(S.name)}, explorer</h1><p>Pick a direction, adjust it, and watch the preview. When it feels right, send your choices back.</p></div>
       <div class="tabs" role="tablist">${[['colours', 'Colours'], ['fonts', 'Fonts']].map(([k, l]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${tab === k}">${l}</button>`).join('')}</div>
       <div class="scroll">${tab === 'colours' ? colours : fonts}</div>
-      <div class="export"><button type="button" class="primary" data-act="copy">Copy my choices</button><button type="button" class="ghost" data-act="download">Download brand.json</button><p class="status" role="status" id="status">${ownFilesNote() || 'Paste the copied text back into the conversation, or say where the file was saved.'}</p></div></aside>`;
+      <div class="export"><button type="button" class="primary" data-act="copy">Copy my choices</button><button type="button" class="ghost" data-act="download">Download brand.json</button><p class="status" role="status" id="status">${ownFilesNote() || 'Paste the copied text back into the conversation, or say where the file was saved.'}</p><a class="credit" href="https://taykon.studio" target="_blank" rel="noopener">Made by <b>Taykon</b> Studio</a></div></aside>`;
   }
   const ownFiles = () => ['display', 'text', 'mono'].map(r => S.fonts[r]).filter(f => f && f.file).map(f => f.file);
   const ownFilesNote = () => ownFiles().length ? `Also send ${[...new Set(ownFiles())].join(', ')}: font files do not travel in the copied text.` : '';
