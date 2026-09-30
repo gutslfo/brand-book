@@ -8,7 +8,8 @@ can hand to a printer or a developer.
 
 [**See the three example books**](https://gutslfo.github.io/brand-book/) ·
 [**Try the picker**](https://gutslfo.github.io/brand-book/levain/explorer.html) ·
-[**Install**](#install)
+[**Install**](#install) ·
+[**Made by Taykon Studio**](#made-by-taykon-studio)
 
 ![MIT licence](https://img.shields.io/badge/licence-MIT-2b2b2b)
 ![Claude skill](https://img.shields.io/badge/Claude-skill-c96442)
@@ -248,9 +249,16 @@ book chapter by chapter, one question at a time, and rebuilds.
 Issues and pull requests are welcome. Useful directions: translated labels for the book, more page
 layouts, more example brands, and reports from claude.ai.
 
+## Made by Taykon Studio
+
+[Taykon Studio](https://taykon.studio) is Pierre Tran's studio in Geneva. I built this skill to give
+founders the kind of brand book that usually takes a studio weeks.
+
+The studio rebuilds coffee shop websites: editorial, and live within days. You bring your brand
+assets, the studio handles design, development and launch. A brand book made with this skill is
+exactly that starting point, so if you have one and want a website that follows it,
+[start a project](https://taykon.studio) or write to [pierre@taykon.studio](mailto:pierre@taykon.studio).
+
 ## Licence
 
 MIT. Use it for your own brand, your clients' brands, or build on it; keep the copyright notice.
-
-Made by Pierre Tran at [Taykon Studio](https://taykon.studio), Geneva, to give founders the kind of
-brand book that usually takes a studio weeks.
