@@ -251,18 +251,14 @@ layouts, more example brands, and reports from claude.ai.
 
 ## Made by Taykon Studio
 
-<a href="https://taykon.studio"><picture>
+<a href="https://github.com/gutslfo"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/img/taykon-mark-cream.svg">
   <img src="docs/img/taykon-mark-indigo.svg" alt="Taykon Studio" height="40">
 </picture></a>
 
-[Taykon Studio](https://taykon.studio) is Pierre Tran's studio in Geneva. I built this skill to give
-founders the kind of brand book that usually takes a studio weeks.
-
-The studio rebuilds coffee shop websites: editorial, and live within days. You bring your brand
-assets, the studio handles design, development and launch. A brand book made with this skill is
-exactly that starting point, so if you have one and want a website that follows it,
-[start a project](https://taykon.studio) or write to [pierre@taykon.studio](mailto:pierre@taykon.studio).
+Taykon Studio is Pierre Tran's studio in Geneva. I built this skill to give founders the kind of brand
+book that usually takes a studio weeks. Questions, ideas and brand books you made with it are welcome in
+the [issues](https://github.com/gutslfo/brand-book/issues).
 
 ## Licence
 
