@@ -1,6 +1,6 @@
 ---
 name: brand-book
-description: Builds a complete, professional brand guidelines document (a brand book, style guide, or charte graphique) as a single HTML file. It starts by asking what the person already has (logo, colours, fonts), asks a few questions about the atmosphere only for what is missing, researches colours and Google Fonts to match, and opens a picker page with three palette proposals, font pairings, a search across the whole Google Fonts catalogue and room for the person's own fonts, all with a live preview. When the choices come back, it writes the 27-page book modelled on the published guidelines of the world's most valuable brands. The book covers essence and voice, logo clear space, minimum size, backgrounds and misuse, palette, proportions and accessible pairs, type families and hierarchy, grid, imagery, stationery, digital and presentation mockups, the don'ts, and code tokens. Use when someone asks for brand guidelines, a brand book, a visual identity guide, help choosing brand colours or fonts, or "guidelines like the big companies have".
+description: Builds a professional brand guidelines document (brand book, style guide, charte graphique) as one HTML file. It asks what the person already has (logo, colours, fonts), asks a few questions only about what is missing, then opens a picker page with three palette proposals, font pairings, search across all of Google Fonts, room for the person's own fonts and a live preview. From the choices it writes a 27-page book modelled on the published guidelines of the world's most valuable brands: essence and voice, logo clear space, minimum size and misuse, palette, proportions and accessible pairs, type and hierarchy, grid, imagery, stationery, digital and slide mockups, the don'ts, and code tokens. Use when someone asks for brand guidelines, a brand book, a visual identity guide, help choosing brand colours or fonts, or "guidelines like the big companies have".
 ---
 
 # Brand Book
@@ -47,6 +47,22 @@ no packages. Use `python` or `python3`, whichever exists.
 7. **The skill does not design logos.** Without a logo file, the brand name is set in the chosen display
    font and used as a wordmark throughout the book.
 
+## Where it runs, and who it is for
+
+The skill runs in Claude Code and in the Claude apps (claude.ai, desktop, mobile) with code execution on.
+Many people who use it have never opened a terminal. So:
+
+- **You run everything.** Never ask the person to run a command, open a folder, or edit `brand.json`.
+  Scripts, paths and file names are your business; talk about "the picker" and "your brand book".
+- **Files reach them the way the environment allows.** Where they share a file system with you (Claude
+  Code), give each file's full path as a clickable link. Where they do not (the Claude apps), write the
+  brand folder in your working directory, then share `explorer.html` and `brand-book.html` as files they
+  can download or open, using whatever the environment provides for files meant for the user.
+- **Say what to do with the picker in one plain line**, for example: "Open the picker, choose a direction
+  and fonts, then press Copy my choices and paste the result here." In the apps, add that it opens in any
+  browser once downloaded.
+- **Logos and font files arrive as attachments** in the apps. Save them into the brand folder.
+
 ## Workflow
 
 ### Phase 1: What do you already have?
@@ -77,10 +93,10 @@ everything already exists, skip this phase.
    `explore.shortlist`, and `fonts` set to the first pairing (or the user's fonts).
 5. Run `python <skill-dir>/scripts/check.py <brand>-brand/brand.json` and fix every FAIL. A proposal that
    fails contrast never reaches the user.
-6. Run `python <skill-dir>/scripts/build.py explorer <brand>-brand/brand.json`, then give the explorer's
-   full path as a clickable link, with one line: pick a direction, adjust it, then press "Copy my
-   choices" and paste the result here. Own font files added in the picker must be attached or put in the
-   brand folder: they cannot travel in the copied text.
+6. Run `python <skill-dir>/scripts/build.py explorer <brand>-brand/brand.json`, then hand over the
+   picker as described in "Where it runs", with one line: pick a direction, adjust it, then press "Copy
+   my choices" and paste the result here. Own font files added in the picker must be attached to the
+   conversation: they cannot travel in the copied text.
 
 ### Phase 4: Choices back
 
@@ -100,9 +116,9 @@ colour next to it; rebuild the explorer only if the user wants another look.
    `horizontalScroll` false. Fix through `brand.json` and rebuild. Look at the pages (or at least the
    cover, logo, colour, hierarchy and applications pages) against the canon's house rules. Without a
    browser tool, say plainly that the render was not audited.
-4. **Deliver** the path to `brand-book.html` as a clickable link, then `brand.json`. Two lines: for a
-   PDF, print from Chrome or Edge on A4, landscape, no margins, background graphics on; to change
-   anything later, edit `brand.json` and run the book build again.
+4. **Deliver** `brand-book.html`, then `brand.json`, as described in "Where it runs". Two lines: for a
+   PDF, open the book in Chrome or Edge and print it on A4, landscape, no margins, background graphics
+   on; to change anything later, ask in this conversation (or a new one, with `brand.json` attached).
 
 ### Phase 6: Refine, if wanted
 
