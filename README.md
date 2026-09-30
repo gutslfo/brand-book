@@ -258,7 +258,7 @@ layouts, more example brands, and reports from claude.ai.
 
 Taykon Studio is Pierre Tran's studio in Geneva. I built this skill to give founders the kind of brand
 book that usually takes a studio weeks. Questions, ideas and brand books you made with it are welcome in
-the [issues](https://github.com/gutslfo/brand-book/issues).
+the [issues](https://github.com/gutslfo/brand-book/issues) or at pierre@taykonstudio.com.
 
 ## Licence
 

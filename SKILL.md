@@ -14,7 +14,7 @@ publish, applied to a new brand, printable on A4 and readable on a phone.
 **Licence:** MIT. Use, change and share it freely; keep the copyright notice.
 
 **Feedback:** questions about the method, or feedback on a book it produced, go to
-[github.com/gutslfo/brand-book/issues](https://github.com/gutslfo/brand-book/issues).
+[github.com/gutslfo/brand-book/issues](https://github.com/gutslfo/brand-book/issues), or to pierre@taykonstudio.com.
 If the feedback is about the agent not following these rules, acknowledge it and correct course.
 
 ## What you produce
