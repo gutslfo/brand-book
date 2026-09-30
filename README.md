@@ -8,7 +8,7 @@ can hand to a printer or a developer.
 
 [**See the three example books**](https://gutslfo.github.io/brand-book/) ·
 [**Try the picker**](https://gutslfo.github.io/brand-book/levain/explorer.html) ·
-[**Install**](#install) ·
+[**Download for Claude**](https://gutslfo.github.io/brand-book/brand-book.zip) ·
 [**Made by Taykon Studio**](#made-by-taykon-studio)
 
 ![MIT licence](https://img.shields.io/badge/licence-MIT-2b2b2b)
@@ -171,19 +171,28 @@ Generated documents usually give themselves away in the details, so the skill ch
 
 ## Install
 
-**Claude Code**
+### No code: the Claude app or claude.ai
+
+Works on every Claude plan, Free included, on the web and in the desktop app.
+
+1. [**Download brand-book.zip**](https://gutslfo.github.io/brand-book/brand-book.zip). Keep it zipped.
+2. In Claude, open **Settings → Capabilities** and turn on **Code execution and file creation**.
+3. Open **Customize → Skills**, press **+**, then **Create skill → Upload a skill**, and choose the ZIP.
+4. Start a new chat and ask for brand guidelines.
+
+Claude sends you the picker as a file: open it, choose your colours and fonts, press **Copy my choices**
+and paste the result into the chat. The brand book comes back the same way. To change anything later,
+just ask.
+
+### Claude Code
 
 ```bash
 git clone https://github.com/gutslfo/brand-book ~/.claude/skills/brand-book
 ```
 
-Then start a new session and ask for brand guidelines. The skill loads on its own.
-
-**Claude.ai**: download this repository as a ZIP and upload it in the Skills section of your settings.
-I have not tried this route yet; reports are welcome in the issues.
-
-You need Python 3 (no packages) and a browser to open the picker and the book. A browser tool for Claude
-(for example the Playwright MCP server) is optional: with one, Claude also runs the render audit itself.
+Then start a new session and ask for brand guidelines. The skill loads on its own. It needs Python 3 (no
+packages). A browser tool for Claude (for example the Playwright MCP server) is optional: with one,
+Claude also runs the render audit itself.
 
 ## Use
 
@@ -195,14 +204,18 @@ Ask in plain words. A few ways in:
 
 > Here is our logo, our palette and our two font files. Turn them into proper guidelines.
 
-Everything lands in a `<brand>-brand/` folder: `brand.json`, `explorer.html`, `brand-book.html`, plus
-your logo and font files. To change something later, edit `brand.json` and rebuild:
+You get three files: the picker, the brand book, and `brand.json`, which holds every decision. Keep
+`brand.json`: attach it to a new chat and Claude can change the book or rebuild it at any time.
+
+For a PDF, open the book in Chrome or Edge and print it: A4, landscape, no margins, background graphics
+on.
+
+In Claude Code everything lands in a `<brand>-brand/` folder, and you can rebuild by hand after editing
+`brand.json`:
 
 ```bash
 python ~/.claude/skills/brand-book/scripts/build.py book levain-brand/brand.json
 ```
-
-For a PDF, print the book from Chrome or Edge: A4, landscape, no margins, background graphics on.
 
 ## Under the hood
 
@@ -224,6 +237,7 @@ scripts/fonts.py                search the catalogue, check names and weights
 scripts/build.py                brand.json + template -> one self-contained HTML file
 scripts/check.py                palette, contrast and font checks
 scripts/audit.js                the in-browser render audit
+scripts/package.py              builds docs/brand-book.zip, the download for the Claude apps
 docs/                           the demo site and the three examples
 ```
 
@@ -234,6 +248,9 @@ and used as a wordmark. The book then shows its clear space, minimum size and mi
 
 **Can I use a font that isn't on Google Fonts?** Yes. Add the file in the picker, or give it to Claude.
 It is embedded in the book so it shows on any machine. Check that your licence allows embedding.
+
+**Do I need to know how to code?** No. In the Claude app you upload one ZIP once, then talk to Claude.
+Claude runs everything; you only click through the picker and read the book.
 
 **Can the book be in another language?** Everything you write into it can. The book's own labels
 (chapter names, captions) are in English for now.
@@ -247,7 +264,8 @@ book chapter by chapter, one question at a time, and rebuilds.
 ## Contributing
 
 Issues and pull requests are welcome. Useful directions: translated labels for the book, more page
-layouts, more example brands, and reports from claude.ai.
+layouts, more example brands, and reports from the Claude apps. After changing the skill, run
+`python scripts/package.py` to refresh the download.
 
 ## Made by Taykon Studio
 
