@@ -5,7 +5,7 @@ description: Builds a complete, professional brand guidelines document (a brand 
 
 # Brand Book
 
-**Created by Pierre Tran / [Taykon Studio](https://taykon.studio)**
+**Created by Pierre Tran / Taykon Studio**
 
 Turns what a person already knows about their brand, and a few answers about what they do not know
 yet, into a brand book that reads as commissioned: the chapters, rules and numbers the largest brands
@@ -14,7 +14,7 @@ publish, applied to a new brand, printable on A4 and readable on a phone.
 **Licence:** MIT. Use, change and share it freely; keep the copyright notice.
 
 **Feedback:** questions about the method, or feedback on a book it produced, go to
-[github.com/gutslfo/brand-book/issues](https://github.com/gutslfo/brand-book/issues), or to taykon.studio.
+[github.com/gutslfo/brand-book/issues](https://github.com/gutslfo/brand-book/issues), or to pierre@taykonstudio.com.
 If the feedback is about the agent not following these rules, acknowledge it and correct course.
 
 ## What you produce

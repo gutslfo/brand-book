@@ -8,7 +8,8 @@ can hand to a printer or a developer.
 
 [**See the three example books**](https://gutslfo.github.io/brand-book/) ·
 [**Try the picker**](https://gutslfo.github.io/brand-book/levain/explorer.html) ·
-[**Install**](#install)
+[**Install**](#install) ·
+[**Made by Taykon Studio**](#made-by-taykon-studio)
 
 ![MIT licence](https://img.shields.io/badge/licence-MIT-2b2b2b)
 ![Claude skill](https://img.shields.io/badge/Claude-skill-c96442)
@@ -248,9 +249,23 @@ book chapter by chapter, one question at a time, and rebuilds.
 Issues and pull requests are welcome. Useful directions: translated labels for the book, more page
 layouts, more example brands, and reports from claude.ai.
 
+## Made by Taykon Studio
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/taykon-mark-cream.svg">
+  <img src="docs/img/taykon-mark-indigo.svg" alt="Taykon Studio" height="40">
+</picture>
+
+Taykon Studio is Pierre Tran's studio in Geneva. I built this skill to give founders the kind of brand
+book that usually takes a studio weeks. Questions, ideas and brand books you made with it are welcome in
+the [issues](https://github.com/gutslfo/brand-book/issues) or at pierre@taykonstudio.com.
+
 ## Licence
 
 MIT. Use it for your own brand, your clients' brands, or build on it; keep the copyright notice.
 
-Made by Pierre Tran at [Taykon Studio](https://taykon.studio), Geneva, to give founders the kind of
-brand book that usually takes a studio weeks.
+## Going further
+
+The book sets the rules. If you would like to see them carried into a full identity or a website, that
+is the work I do at Taykon Studio. Send your `brand.json` or a few lines on your brand to
+[pierre@taykonstudio.com](mailto:pierre@taykonstudio.com) and I will tell you how I would approach it.
