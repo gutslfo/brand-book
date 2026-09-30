@@ -251,6 +251,11 @@ layouts, more example brands, and reports from claude.ai.
 
 ## Made by Taykon Studio
 
+<a href="https://taykon.studio"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/taykon-mark-cream.svg">
+  <img src="docs/img/taykon-mark-indigo.svg" alt="Taykon Studio" height="40">
+</picture></a>
+
 [Taykon Studio](https://taykon.studio) is Pierre Tran's studio in Geneva. I built this skill to give
 founders the kind of brand book that usually takes a studio weeks.
 
