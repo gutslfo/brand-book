@@ -5,7 +5,7 @@ description: Builds a complete, professional brand guidelines document (a brand 
 
 # Brand Book
 
-**Created by Pierre Tran / Taykon Studio ([github.com/gutslfo](https://github.com/gutslfo))**
+**Created by Pierre Tran / Taykon Studio**
 
 Turns what a person already knows about their brand, and a few answers about what they do not know
 yet, into a brand book that reads as commissioned: the chapters, rules and numbers the largest brands
