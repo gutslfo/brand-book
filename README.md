@@ -264,13 +264,7 @@ the [issues](https://github.com/gutslfo/brand-book/issues) or at pierre@taykonst
 
 MIT. Use it for your own brand, your clients' brands, or build on it; keep the copyright notice.
 
-## Work with Taykon Studio
+## Going further
 
-The skill gives you the rules. Taykon Studio takes them further: brand identities, visual systems and
-the websites that carry them, designed and engineered as one piece, from Geneva.
-
-If you made a brand book with this skill and want it carried into a finished identity or a website, or
-you would rather hand the whole thing to a studio, send your `brand.json` or a few lines on where you
-are, and I will reply with how I would take it from there.
-
-**[Write to pierre@taykonstudio.com](mailto:pierre@taykonstudio.com?subject=Brand%20book)**
+If you want to take your brand past the book, into a full identity or a website, that is what I do at
+Taykon Studio: pierre@taykonstudio.com.
