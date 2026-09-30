@@ -266,5 +266,6 @@ MIT. Use it for your own brand, your clients' brands, or build on it; keep the c
 
 ## Going further
 
-If you want to take your brand past the book, into a full identity or a website, that is what I do at
-Taykon Studio: pierre@taykonstudio.com.
+The book sets the rules. If you would like to see them carried into a full identity or a website, that
+is the work I do at Taykon Studio. Send your `brand.json` or a few lines on your brand to
+[pierre@taykonstudio.com](mailto:pierre@taykonstudio.com) and I will tell you how I would approach it.
